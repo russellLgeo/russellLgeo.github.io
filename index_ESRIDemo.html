@@ -1,0 +1,96 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Basemaps with different projections | Sample | ArcGIS Maps SDK for JavaScript 4.25</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.25/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #srDiv{
+        height: 40px;
+        padding: 10px;
+      }
+    </style>
+
+    <script>
+      require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/portal/Portal",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/BasemapGallery/support/PortalBasemapsSource",
+      "esri/widgets/Expand",
+	  "esri/config",
+	  "esri/WebMap"
+    ], function(
+      Map,
+      MapView,
+      Portal,
+      BasemapGallery,
+      PortalBasemapsSource,
+      Expand,
+	  esriConfig,
+	  WebMap
+    ) {
+
+	   esriConfig.apiKey = "AAPK276cbb0d0adb46dd84559e3cc629b9ecltTU1snes6ZLNVPJfKUtP-Fy__eVTdXbkAxnPvlbd9t8BwVyimdY_FonEXjhEnCg";
+		esriConfig.portalUrl = "https://portal.gis.ubc.ca/arcgis";
+      const portal = new Portal();
+	  const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8"
+      // source for basemaps from a portal group
+      // containing basemaps with different projections
+      const source = new PortalBasemapsSource({
+        portal,
+        query: {
+          id: "bdb9d65e0b5c480c8dcc6916e7f4e099"
+        }
+      });
+
+
+      var map = new WebMap({
+        portalItem: {
+          id: basemapPortalID
+        }
+     });
+
+      // center the view over 48 states
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        //center: [-123, 49],
+        zoom: 2,
+        constraints: {
+          snapToZoom: false
+        }
+      });
+      view.ui.add("srDiv", "top-right");
+
+      const bgExpand = new Expand({
+        view,
+        content: new BasemapGallery({ source, view }),
+        expandIconClass: "esri-icon-basemap"
+      });
+      view.ui.add(bgExpand, "top-right");
+
+      view.watch("spatialReference", ()=> {
+        document.getElementById("srDiv").innerHTML = `view.spatialReference.wkid = <b>${view.spatialReference.wkid}</b>`;
+      });
+    });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div id="srDiv" class="esri-widget"></div>
+  </body>
+</html>
