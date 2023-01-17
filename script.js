@@ -400,6 +400,11 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 		if (feature.graphic.attributes.LOCATION == null) {
 			locHTML = ""
+			
+			
+			
+			
+			
 
 		}else {
 			locHTML = "Location: " + feature.graphic.attributes.LOCATION + "<br>" + "<br>"
@@ -513,6 +518,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
      		}),
 			//placeholder:"Search for a place",
 			placeholder:"Search for a place",
+			searchFields: ["placename"],
   			displayField:  "placename",
 			name: "POI Seach",
   			exactMatch: false,
@@ -537,7 +543,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				outFields: ["*"]
      		}),
 			placeholder:"Search for a place",
-			searchFields: "placename",
+			searchFields: ["placename"],
   			displayField: "placename",
 			name: "POI Seach",
   			exactMatch: false,
