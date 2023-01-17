@@ -38,7 +38,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Basemap 
 	var webmap = new WebMap({
         portalItem: {
-          id: highContrastPortalID
+          id: '2013b63e6ad34335abe1f184de6da3b1'
         }
      });
 		//Crosswalk table
@@ -49,7 +49,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Routing layer
 	const routeLayer = new RouteLayer({
 		portalItem: {
-			id: '2013b63e6ad34335abe1f184de6da3b1'
+			id: routePortalID
 		},
 	})
 	//Adds the basemap and the routing / crosswalk layers
