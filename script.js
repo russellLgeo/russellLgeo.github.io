@@ -38,7 +38,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Basemap 
 	var webmap = new WebMap({
         portalItem: {
-          id: basemapPortalID
+          id: highContrastPortalID
         }
      });
 		//Crosswalk table
@@ -55,7 +55,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Adds the basemap and the routing / crosswalk layers
 	var view = new MapView({
         map: webmap,
-		layers: [routeLayer,crosswalkTable],
+		//layers: [routeLayer,crosswalkTable],
         container: "viewDiv",
     });
 //	
