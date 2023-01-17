@@ -525,8 +525,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			outFields: ["*"],
 			maxSuggestions: 6
 		}],
-		locationEnabled: true,
+		locationEnabled: false,
 		popupEnabled: true,
+		container:"searchBoxes"
 		//popupTemplate: popupTemplate
 	});
 	
@@ -557,7 +558,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Add the top search widget 
 	view.ui.add(searchWidget1, {
 		position: "top-left",
-		index: 10
+		index: 10,
+		
 	});	
 	//searchWidget2.set("sources", sources)
 	//Add the bottom search widget to the top left corner of the view
