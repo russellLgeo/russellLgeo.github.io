@@ -37,11 +37,7 @@ require(["esri/Graphic","esri/config","esri/Map","esri/views/MapView","esri/widg
 	
 	//Basemap 
 	var webmap = new Map({
-        basemap: {
-		portalItem: {
-          id: basemapPortalID
-        }
-		}
+        basemap: 'arcgis-imagery'
      });
 		//Crosswalk table
 	var crosswalkTable = new FeatureLayer({
