@@ -49,7 +49,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//Routing layer
 	const routeLayer = new RouteLayer({
 		portalItem: {
-			id: routePortalID
+			id: '2013b63e6ad34335abe1f184de6da3b1'
 		},
 	})
 	//Adds the basemap and the routing / crosswalk layers
