@@ -1,7 +1,7 @@
 #viewDiv {
 	padding: 0;
 	margin: 0;
-	height: 80%;
+	height: 100%;
 	width: 100%;
 }
 .esri-widget-search {
@@ -16,34 +16,43 @@
 	height:80px;
 	
 }
-#directionsImage {
-	width:40px;
-	height:45px;
-	padding-top:5px
-}
-#directionsButton {
-	cursor: pointer;
-	background-color: #ffffff;
-	border-radius:30px;
-}
-#directionsButton:hover {
-	background-color:#0680A6;
-}
+
+/*
 #searchBoxes-suggest-menu {
 	z-index:50000;
+	left:80px
 }
+*/
 #travelmodeBox {
+	
 	position:absolute;
-	top:150px;
-	left:20px;
+	top:120px;
+	left:305px;
 	z-index:1;
 	display:none;
+	background-color:
+}
+.topButton {
+	padding-left:22px;
+	padding-right:22px;
+	background-color:#ffffff;
+	border-radius:10px;
+}
+.topImage{
+	width:30px;
+	height:35px;
+	padding-top:5px;
+}
+.topButton:hover {
+	cursor: pointer;
+	background-color:#40B4E5;
 }
 .travelButton {
 	padding-left:22px;
 	padding-right:22px;
 	background-color:#ffffff;
-	border-radius:1px;
+	border-radius:10px;
+
 }
 .travelImage{
 	width:30px;
@@ -53,7 +62,21 @@
 .travelButton:hover {
 	cursor: pointer;
 	background-color:#40B4E5;
-	
+}
+
+/*
+#directionsButton {
+	cursor: pointer;
+	background-color: #ffffff;
+	border-radius:30px;
+}
+#directionsButton:hover {
+	background-color:#0680A6;
+}
+#directionsImage {
+	width:40px;
+	height:45px;
+	padding-top:5px
 }
 #accessButton {
 	cursor: pointer;
@@ -81,6 +104,7 @@
 #layerButton:hover {
 	background-color:#0680A6;
 }
+*/
 /* Add a black background color to the top navigation */
 .topnav {
   background-color: #002145;

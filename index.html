@@ -29,25 +29,32 @@
    
 </head>
 <body>
+<!--
 <div id='logo'>UBC Logo Here</div>
 <div class="topnav">
   <a href="#contact">Contact</a>
   <a href="#about">About</a>
 </div>
+-->
 <!--<div title="Directions" id='directionsButton'></div>-->
-<div title="Go to location" id='locationButton'></div>
+<!--<div title="Go to location" id='locationButton'></div>-->
+<!--
 <div id="topButtons">
-<button title="Directions" id='directionsButton' type="button" onclick = "window.parent.toggleDirections()">
-	<img id ='directionsImage' src="noun-route-939679.svg" alt="buttonpng" border="0" />
+<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
+	<img id ='directionsImage' class='travelImage' src="noun-route-939679.svg" alt="buttonpng" border="0" />
 </button>
-<button title="Accessibility options" id='accessButton' type="button" onclick = "window.parent.toggleAccessBox()">
-	<img id ='wheelchairImage' src="noun-wheelchair-1258532.svg" alt="buttonpng" border="0" />
+<button title="Accessibility options" id='accessButton' class = 'topButton' type="button" onclick = "window.parent.toggleAccessBox()">
+	<img id ='wheelchairImage' class='travelImage' src="noun-wheelchair-1258532.svg" alt="buttonpng" border="0" />
 </button>
-<button title="Toggle Layers" id='layerButton' type="button" onclick = "window.parent.toggleLayerBox()">
-	<img id ='layerImage' src="noun-layers-5426096.svg" alt="buttonpng" border="0" />
+<button title="Toggle Layers" id='layerButton'  class = 'topButton' type="button" onclick = "window.parent.toggleLayerBox()">
+	<img id ='layerImage' class='travelImage' src="noun-layers-5426096.svg" alt="buttonpng" border="0" />
 </button>
 </div>
+-->
+<div id='searchBoxes'></div>
+<!--
 <div id='travelmodeBox'>
+	<center><b>Select Travel Mode</b></center>
 	<button title="Walk / roll" id='walkButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Walking')">
 	<img class='travelImage' id ='walkImage' src="noun-walk-341356.svg" alt="buttonpng" border="0" /></button>
 	<button title="BIking" id='bikeButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Biking')">
@@ -55,8 +62,10 @@
 	<button title="Drive" id='driveButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Driving')">
 	<img class='travelImage' id ='driveImage' src="noun-car-2558234.svg" alt="buttonpng" border="0" /></button>
 </div>
+-->
 <div id='viewDiv'></div>
 
+<!--
 <div id='accessBox'>
 	<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
 	<div id="accesscontent" style="padding-left:5px">
@@ -82,7 +91,9 @@
 	</div>
 </div>
 <div id='layerList'></div>
+-->
 
+<!--
 <div id='travelmodeBox'>
 	<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
 	<div id="accesscontent" style="padding-left:5px">
@@ -98,12 +109,15 @@
 	<label for="Driving">Drive / Walk</label><br>
 	</div>
 </div>
+-->
+<!--
 <div id='directionsBox'>
 	<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
 	<div id='directions'>
 	</div>
 	<button id="speak">Speak Text</button>
 </div>
+-->
 
 	
 <script src='script.js'></script>
