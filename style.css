@@ -1,0 +1,185 @@
+#viewDiv {
+	padding: 0;
+	margin: 0;
+	height: 95%;
+	width: 100%;
+	z-index:-8;
+}
+.esri-widget-search {
+    z-index: 60
+}
+
+#searchBoxes {
+
+}
+#topButtons {
+	position:absolute;
+	top:68px;
+	left:16%;
+	display:block;
+	z-index:2;
+	height:80px;
+	
+}
+.topButton {
+	padding-left:22px;
+	padding-right:22px;
+	background-color:#ffffff;
+	border-radius:10px;
+}
+.topButton:hover {
+	cursor: pointer;
+	background-color:#40B4E5;
+}
+.topImage{
+	width:30px;
+	height:35px;
+	padding-top:5px;
+}
+
+#travelmodeBox {
+	
+	position:absolute;
+	top:120px;
+	left:305px;
+	z-index:1;
+	display:none;
+}
+#trackingBox {
+	padding-top:5px;
+	position:relative;
+	width:225px;
+	height:30px;
+	top:140px;
+	left:300px;
+	border-radius:10px;
+	border-width:2px;
+	border-style:solid;
+	border-color:black;
+	display:none;
+}
+.travelButton {
+	padding-left:22px;
+	padding-right:22px;
+	background-color:#ffffff;
+	border-radius:10px;
+
+}
+.travelButton:hover {
+	cursor: pointer;
+	background-color:#40B4E5;
+}
+
+.travelImage{
+	width:30px;
+	height:35px;
+	padding-top:5px;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #002145;
+  overflow: hidden;
+  
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  font-family: Arial;
+  float: right;
+}
+
+#hiddenMenus {
+	position:absolute;
+	left:30%;
+	top:15px;
+}
+#accessBox {
+	background-color: #ffffff;
+	border: 1px solid;
+/*	left:30%;*/
+	position:relative;
+	width: 360px;
+	top:55px;
+	height:180px;
+	font-family: Arial;
+	display:none;
+}
+#layerList {
+	top:200px;
+	left:562px;
+}
+.catcontent {
+  display:none; 
+}
+.catheading {
+  cursor: pointer;
+}
+#logo {
+	position:absolute;
+	top:15px;
+	left:20px;
+	font-size:12px;
+	color: #f2f2f2;
+	
+}
+/*
+#directionsButton {
+	position:absolute;
+	top:71px;
+	left:260px;
+	height:32px;
+	background-color: #ffffff;
+	z-index:2
+}
+*/
+#locationButton {
+	position:absolute;
+	top:113px;
+	left:263px;
+	height:32px;
+	background-color: #ffffff;
+	z-index:2;
+/*	display:block;*/
+}
+#directionsBox {
+	background-color: #ffffff;
+	border: 1px solid;
+	left:1.2%;
+	position:absolute;
+	width: 460px;
+	top:250px;
+	height:375px;
+	overflow-y:scroll;
+	font-family: Arial;
+	display:none;
+	z-index:0;
+}
+
+
+.esri-menu esri-search__suggestions-menu {
+	position:fixed;
+	z-index:6
+}
+
+a {
+	color: #00A8E0
+}
+.w3-bar {
+	background-color:'#002145'
+}
+
+#routeState{
+    position: absolute;
+    top: 70px;
+    left: 275px;
+    z-index: 9999;
+    background: #ffffff;
+	display:none;
+}
