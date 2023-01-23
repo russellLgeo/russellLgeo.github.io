@@ -7,14 +7,6 @@ var accessibleOn = false
 var layerOn = false
 
 
-
-//var infoboxsvg = d3.select("#directionsButton").append("svg")
-//    .attr("id","theinfoboxcontrols")
-//	.attr("height",50)
-//	.attr("width",35)
-// 	.attr("style", "outline-color: black")
-//	.attr("style","outline-style:soild")
-
 //ESRI modules used
 require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/widgets/Search","esri/widgets/Directions","esri/widgets/Directions/DirectionsViewModel", "esri/layers/RouteLayer","esri/rest/support/PolygonBarrier","esri/rest/support/FeatureSet","esri/rest/support/PointBarrier","esri/rest/support/RouteParameters","esri/rest/route","esri/layers/FeatureLayer","esri/rest/support/Query","esri/rest/support/Stop","esri/rest/support/RouteInfo","esri/core/Collection","esri/rest/support/TravelMode","esri/rest/networkService","esri/rest/support/DirectionPoint","esri/PopupTemplate","esri/widgets/LayerList","esri/widgets/Legend","esri/widgets/Locate","esri/widgets/Track"]
 , function (Graphic,esriConfig,WebMap,MapView,Search,Directions,DirectionsVM,RouteLayer,PolygonBarrier,FeatureSet,PointBarrier,RouteParameters,route,FeatureLayer,Query,Stop,RouteInfo,Collection,TravelMode,networkService,DirectionPoint,PopupTemplate,LayerList,Legend,Locate,Track) {
