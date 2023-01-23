@@ -167,13 +167,12 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
     //Adds the basemap and the routing / crosswalk layers
 	var view = new MapView({
-		container: "viewDiv",
         map: webmap,
-		//layers: [routeLayer,crosswalkTable],
-        
+		layers: [routeLayer,crosswalkTable],
+        container: "viewDiv",
     });
 	var track = new Track({
-          //view: view,
+          view: view,
 		  useHeadingEnabled: true,
 		  container:'trackingBox',
 		  visible:true
@@ -227,10 +226,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	  id: "directions",
 	  image: "svgs/noun-route-939679.svg"
 	};
-//	view.ui.add(track);
-//	view.map.add(polyBarrierfl)
-//	view.map.add(poiFL)
-//	view.map.add(slopeFL)
+	view.ui.add(track);
+	view.map.add(polyBarrierfl)
+	view.map.add(poiFL)
+	view.map.add(slopeFL)
 
 	//Popup stuff
 	view.popup = {
@@ -251,7 +250,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
               buttonEnabled: false,
               position: 'bottom-left'
     });
-
+	
 	originFocus = false
 	destFocus = true
 	
@@ -489,7 +488,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 
 	//The top search widget that acts as an origin in the routing 
 	var searchWidget1 = new Search({
-		//view: view,
+		view: view,
 		includeDefaultSources: false,
 		sources: [{
 			layer: new FeatureLayer({
@@ -516,7 +515,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
     
 	//The bottom search widget that acts as a destination in the routing 
     var searchWidget2 = new Search({
-		//view: view,
+		view: view,
 		visible: false,
 		includeDefaultSources: false,
 		sources: [{
@@ -538,17 +537,17 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	});
 	
 	//Add the top search widget 
-//	view.ui.add(searchWidget1, {
-//		position: "top-left",
-//		index: 10,
-//		
-//	});	
-//	//searchWidget2.set("sources", sources)
-//	//Add the bottom search widget to the top left corner of the view
-//	view.ui.add(searchWidget2, {
-//		position: "top-left",
-//		index: 10
-//	});	
+	view.ui.add(searchWidget1, {
+		position: "top-left",
+		index: 10,
+		
+	});	
+	//searchWidget2.set("sources", sources)
+	//Add the bottom search widget to the top left corner of the view
+	view.ui.add(searchWidget2, {
+		position: "top-left",
+		index: 10
+	});	
 
 	var n = 0
 	var poid1 = ''
@@ -778,54 +777,54 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}) 
 		    
 			route.solve(routeUrl, routeParams).catch(function(data){
-				alert("Could not route between selected locations");
-//				origGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][0]['geometry']
-//				destGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][1]['geometry']
-//				stopArray1Adj = []
-//				stopArray2Adj = []
-//				
-//				if (stopArray1.length > 1) {
-//					for (i =0; i < stopArray1.length; i++) {
-//						
-//						
-//						if (stopArray1[i]['geometry']['x'] != origGeom['x'] &&
-//						    stopArray1[i]['geometry']['y'] != origGeom['y']
-//						   ) {
-//							stopArray1Adj.push(stopArray1[i])
-//							
-//							
-//						}
-//					}
-//					
-//				}
-//				
-//			    if (stopArray2.length > 1) {
-//					for (i =0; i < stopArray2.length; i++) {
-//						if (stopArray2[i]['geometry']['x'] != destGeom['x'] &&
-//						    stopArray2[i]['geometry']['y'] != destGeom['y']
-//						   ) {
-//							stopArray2Adj.push(stopArray2[i])
-//							
-//
-//						}
-//					}
-//					
-//				}
-//				if (stopArray1Adj.length > 0 && stopArray2Adj.length > 0) {
-//					
-//					routeResults(stopArray1Adj,stopArray2Adj)
-//					
-//				}
-//				else if (stopArray1Adj.length > 0) {
-//					console.log(stopArray1Adj)
-//					console.log(stopArray2)
-//					routeResults(stopArray1Adj,stopArray2)
-//				}
-//				else if (stopArray2Adj.length > 0) {
-//					console.log(stopArray1)
-//					console.log(stopArray2Adj)
-//					routeResults(stopArray1,stopArray2Adj)
-//				}
+				
+				origGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][0]['geometry']
+				destGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][1]['geometry']
+				stopArray1Adj = []
+				stopArray2Adj = []
+				
+				if (stopArray1.length > 1) {
+					for (i =0; i < stopArray1.length; i++) {
+						
+						
+						if (stopArray1[i]['geometry']['x'] != origGeom['x'] &&
+						    stopArray1[i]['geometry']['y'] != origGeom['y']
+						   ) {
+							stopArray1Adj.push(stopArray1[i])
+							
+							
+						}
+					}
+					
+				}
+				
+			    if (stopArray2.length > 1) {
+					for (i =0; i < stopArray2.length; i++) {
+						if (stopArray2[i]['geometry']['x'] != destGeom['x'] &&
+						    stopArray2[i]['geometry']['y'] != destGeom['y']
+						   ) {
+							stopArray2Adj.push(stopArray2[i])
+							
+
+						}
+					}
+					
+				}
+				if (stopArray1Adj.length > 0 && stopArray2Adj.length > 0) {
+					
+					routeResults(stopArray1Adj,stopArray2Adj)
+					
+				}
+				else if (stopArray1Adj.length > 0) {
+					console.log(stopArray1Adj)
+					console.log(stopArray2)
+					routeResults(stopArray1Adj,stopArray2)
+				}
+				else if (stopArray2Adj.length > 0) {
+					console.log(stopArray1)
+					console.log(stopArray2Adj)
+					routeResults(stopArray1,stopArray2Adj)
+				}
 				
 			})
 	}

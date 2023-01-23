@@ -3,7 +3,6 @@
 	margin: 0;
 	height: 95%;
 	width: 100%;
-	z-index:-8;
 }
 .esri-widget-search {
     z-index: 60
@@ -165,12 +164,6 @@
 	font-family: Arial;
 	display:none;
 	z-index:0;
-}
-
-
-.esri-menu esri-search__suggestions-menu {
-	position:fixed;
-	z-index:6
 }
 
 a {
