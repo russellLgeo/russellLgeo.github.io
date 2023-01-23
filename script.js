@@ -25,7 +25,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	esriConfig.portalUrl = "https://portal.gis.ubc.ca/arcgis";
 	
 	const synth = window.speechSynthesis;
-	const routeUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Multimodal/NAServer/Route%202'
+	const routeUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Multimodal/NAServer/Route'
 	const routePortalID = "b1846c8638bb4d679bd06f120c87825b"
 	const steepSlopeSegmentPortalID = "159428d89f3b412cae133a5e8c2a11ba"
 	const poiForBasemapUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Hosted/ubcv_poi_POI_view/FeatureServer/0"
@@ -116,30 +116,20 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	//Default travel mode is walking
     tMode = getTravelMode("Walking")
-
+	travelMode = "Walking"
 	window.changeTravelModeAccess = function(){
-		
+		console.log(travelMode)
 		if (document.getElementById("simplify").checked == true) {
 			simplifyStr = " Simplified"
 		}else {
 			simplifyStr = ""
 		}
-		
-		if (document.getElementById("noStairs").checked == true && document.getElementById("noSlope").checked == true ){
-			theMode = "Avoid Stairs and Slopes"
-		}else if (document.getElementById("noStairs").checked == true){
-			theMode = "Avoid Stairs"
-		}else if (document.getElementById("noSlope").checked == true){
-			theMode = "Avoid Slopes"
+		if (document.getElementById("simplify").checked == true) {
+			steepStr = " No Slopes"
 		}else {
-			theMode = "Walking"
-		} 
-		if (document.getElementById("noStairs").checked == true || document.getElementById("noSlope").checked == true || document.getElementById("simplify").checked == true){
-			document.getElementById("walkButton").style.backgroundColor = "#0680A6"
-			document.getElementById("bikeButton").style.backgroundColor = ""
-			document.getElementById("driveButton").style.backgroundColor = ""
+			steepStr = ""
 		}
-		theMode = theMode + simplifyStr
+		theMode = travelMode + steepStr + simplifyStr
 		getTravelMode(theMode).then(function()
 		{
 			if (stopArray1.length > 0 && stopArray2.length > 0) {
@@ -152,26 +142,25 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	window.changeTravelMode = function(theMode){
 		if (theMode == "Walking"){
 			document.getElementById("walkButton").style.backgroundColor = "#0680A6"
+			document.getElementById("accessButton").style.backgroundColor = ""
 			document.getElementById("bikeButton").style.backgroundColor = ""
-			document.getElementById("driveButton").style.backgroundColor = ""
+			changeEntrances("all")
+		}
+		if (theMode == "Accessible"){
+			document.getElementById("walkButton").style.backgroundColor = ""
+			document.getElementById("accessButton").style.backgroundColor = "#0680A6"
+			document.getElementById("bikeButton").style.backgroundColor = ""
+			changeEntrances("accessible")
 		}
 		if (theMode == "Biking"){
 			document.getElementById("walkButton").style.backgroundColor = ""
+			document.getElementById("accessButton").style.backgroundColor = ""
 			document.getElementById("bikeButton").style.backgroundColor = "#0680A6"
-			document.getElementById("driveButton").style.backgroundColor = ""
-		}
-		if (theMode == "Driving"){
-			document.getElementById("walkButton").style.backgroundColor = ""
-			document.getElementById("bikeButton").style.backgroundColor = ""
-			document.getElementById("driveButton").style.backgroundColor = "#0680A6"
+			changeEntrances("all")
 		}
 		
-		getTravelMode(theMode).then(function()
-		{
-			if (stopArray1.length > 0 && stopArray2.length > 0) {
-				routeResults(stopArray1,stopArray2)
-			}
-		})
+		travelMode = theMode
+		
 		
 		
 	}
@@ -225,32 +214,17 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		if (document.getElementById('accessBox').style.display == 'none') {
 			document.getElementById('hiddenMenus').style.display = 'block'
 			document.getElementById('accessBox').style.display = 'block'
-			document.getElementById('accessButton').style.backgroundColor = "#0680A6"
+			document.getElementById('settingsButton').style.backgroundColor = "#0680A6"
 		}else {
 			document.getElementById('accessBox').style.display = 'none'
-			document.getElementById('accessButton').style.backgroundColor = ""
+			document.getElementById('settingsButton').style.backgroundColor = ""
 		}
 	}
 	
-	document.getElementById('layerList').style.display = 'none'
-	window.toggleLayerBox = function() {
-		
-		if (document.getElementById('layerList').style.display == 'none') {
-			document.getElementById('hiddenMenus').style.display = 'block'
-			layerList.visible = true
-			document.getElementById('layerButton').style.backgroundColor = "#0680A6"
-		}else {
-			//if ()
-			layerList.visible = false
-			document.getElementById('layerButton').style.backgroundColor = ""
-			document.getElementById('hiddenMenus').style.display = 'block'
-		}
-		
-	}
 	const directionsAction = {
 	  title: "Directions",
 	  id: "directions",
-	  image: "/noun-route-939679.svg"
+	  image: "svgs/noun-route-939679.svg"
 	};
 	view.ui.add(track);
 	view.map.add(polyBarrierfl)
@@ -815,61 +789,61 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}) 
 		    
 			route.solve(routeUrl, routeParams).catch(function(data){
-				
-				origGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][0]['geometry']
-				destGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][1]['geometry']
-				stopArray1Adj = []
-				stopArray2Adj = []
-				
-				if (stopArray1.length > 1) {
-					for (i =0; i < stopArray1.length; i++) {
-						
-						
-						if (stopArray1[i]['geometry']['x'] != origGeom['x'] &&
-						    stopArray1[i]['geometry']['y'] != origGeom['y']
-						   ) {
-							stopArray1Adj.push(stopArray1[i])
-							
-							
-						}
-					}
-					
-				}
-				
-			    if (stopArray2.length > 1) {
-					for (i =0; i < stopArray2.length; i++) {
-						if (stopArray2[i]['geometry']['x'] != destGeom['x'] &&
-						    stopArray2[i]['geometry']['y'] != destGeom['y']
-						   ) {
-							stopArray2Adj.push(stopArray2[i])
-							
-
-						}
-					}
-					
-				}
-				if (stopArray1Adj.length > 0 && stopArray2Adj.length > 0) {
-					
-					routeResults(stopArray1Adj,stopArray2Adj)
-					
-				}
-				else if (stopArray1Adj.length > 0) {
-					console.log(stopArray1Adj)
-					console.log(stopArray2)
-					routeResults(stopArray1Adj,stopArray2)
-				}
-				else if (stopArray2Adj.length > 0) {
-					console.log(stopArray1)
-					console.log(stopArray2Adj)
-					routeResults(stopArray1,stopArray2Adj)
-				}
+				alert("Could not route between selected locations");
+//				origGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][0]['geometry']
+//				destGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][1]['geometry']
+//				stopArray1Adj = []
+//				stopArray2Adj = []
+//				
+//				if (stopArray1.length > 1) {
+//					for (i =0; i < stopArray1.length; i++) {
+//						
+//						
+//						if (stopArray1[i]['geometry']['x'] != origGeom['x'] &&
+//						    stopArray1[i]['geometry']['y'] != origGeom['y']
+//						   ) {
+//							stopArray1Adj.push(stopArray1[i])
+//							
+//							
+//						}
+//					}
+//					
+//				}
+//				
+//			    if (stopArray2.length > 1) {
+//					for (i =0; i < stopArray2.length; i++) {
+//						if (stopArray2[i]['geometry']['x'] != destGeom['x'] &&
+//						    stopArray2[i]['geometry']['y'] != destGeom['y']
+//						   ) {
+//							stopArray2Adj.push(stopArray2[i])
+//							
+//
+//						}
+//					}
+//					
+//				}
+//				if (stopArray1Adj.length > 0 && stopArray2Adj.length > 0) {
+//					
+//					routeResults(stopArray1Adj,stopArray2Adj)
+//					
+//				}
+//				else if (stopArray1Adj.length > 0) {
+//					console.log(stopArray1Adj)
+//					console.log(stopArray2)
+//					routeResults(stopArray1Adj,stopArray2)
+//				}
+//				else if (stopArray2Adj.length > 0) {
+//					console.log(stopArray1)
+//					console.log(stopArray2Adj)
+//					routeResults(stopArray1,stopArray2Adj)
+//				}
 				
 			})
 	}
 	accessibleOn = false 
-
-    window.changeEntrances = function() {
-		if (accessibleOn) {
+	
+    window.changeEntrances = function(entranceMode) {
+		if (entranceMode == "all") {
 			accessibleOn = false	
 			entQuery = ""
 			stopArray1 = stopArray1.concat(stopArray1Removed)
@@ -929,14 +903,6 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			
 		})
 		}
-		
-//		if (searchWidget1.searchTerm != '') {
-//			searchWidget1.search()
-//	  	}
-//		if (searchWidget2.searchTerm != '') {
-//
-//			searchWidget2.search()
-//		}
 	}
 	//webmap.portalItem.id = highContrastPortalID
 	window.switchBasemaps = function() {

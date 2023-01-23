@@ -1,20 +1,11 @@
 <head>
    
-    
-    <script src="https://d3js.org/d3.v3.min.js"></script>
     <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.39/moment-timezone-with-data.min.js"></script>
 	<script src="https://js.arcgis.com/4.23/"></script>
-    <script>
-      require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
-
-      });
-    </script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
-
 	<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
-
     <link rel="stylesheet" type="text/css" href="style.css" />
    
 </head>
@@ -26,51 +17,53 @@
 </div>
 
 <div id='searchBoxes'></div>
+<div id='viewDiv'></div>
+<div id="topButtons">
+<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
+	<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
+	<br/>
+	<b style='font-size:12px; white-space:pre'>Directions</b>
+</button>
+<button title="Settings" id='settingsButton' class = 'topButton' type="button" onclick = "window.parent.toggleAccessBox()">
+	<img id ='settingImage' class='topImage' src="svgs/noun-gear-4602778.svg" alt="buttonpng" border="0" />
+	<br/>
+	<b style='font-size:12px; white-space:pre'> Settings </b>
+	
+</button>
+</div>
 <div id='travelmodeBox'>
 	
 	<center><b>Select Travel Mode</b></center>
-	<button title="Walk / roll" id='walkButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Walking')">
-	<img class='travelImage' id ='walkImage' src="noun-walk-341356.svg" alt="buttonpng" border="0" /></button>
-	<button title="Biking" id='bikeButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Biking')">
-	<img class='travelImage' id ='bikeImage' src="noun-bike-4959317.svg" alt="buttonpng" border="0" /></button>
-	<button title="Drive" id='driveButton' class='travelButton' type="button" onclick = "window.parent.changeTravelMode('Driving')">
-	<img class='travelImage' id ='driveImage' src="noun-car-2558234.svg" alt="buttonpng" border="0" /></button>
+	<button title="Walk / roll" id='walkButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Walking')">
+	<img class='travelImage' id ='walkImage' src="svgs/noun-walk-341356.svg" alt="buttonpng" border="0" />
+	<br/>
+	<b style='font-size:12px; white-space:pre'>   Walk   </b>
+	</button>
+	
+	<button title="Accessible" id='accessButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Accessible')">
+	<img class='travelImage' id ='accessImage' src="svgs/noun-wheelchair-1258532.svg" alt="buttonpng" border="0" />
+	<br/>
+	<b style='font-size:11px; white-space:pre'>Accessible</b>
+	</button>
+	<button title="Bike / Roll" id='bikeButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Biking')">
+	<img class='travelImage' id ='bikeImage' src="svgs/noun-bike-4959317.svg" alt="buttonpng" border="0" />
+	<br/>
+	<b style='font-size:11px; white-space:pre'>Bike / Roll </b>
+	</button>
 	<div id="trackingBox"><b>Track my location </b></div>
-	
-	
 </div>
-<div id='viewDiv'>
-<div id="topButtons">
-<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
-	<img id ='directionsImage' class='travelImage' src="noun-route-939679.svg" alt="buttonpng" border="0" />
-</button>
-<button title="Accessibility options" id='accessButton' class = 'topButton' type="button" onclick = "window.parent.toggleAccessBox()">
-	<img id ='wheelchairImage' class='travelImage' src="noun-wheelchair-1258532.svg" alt="buttonpng" border="0" />
-</button>
-<button title="Toggle Layers" id='layerButton'  class = 'topButton' type="button" onclick = "window.parent.toggleLayerBox()">
-	<img id ='layerImage' class='travelImage' src="noun-layers-5426096.svg" alt="buttonpng" border="0" />
-</button>
-</div>
-	</div>
 
 <div id="hiddenMenus">
 		<div id='accessBox'>
 			<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
 			<div id="accesscontent" style="padding-left:5px">
 			<b style='font-size:16px'>Custom Navigation</b><br>
-
-			<input type="checkbox" id="noStairs" name="noStairs" value="NoStair" onclick="window.parent.changeTravelModeAccess()">
-			<label for="NoStair">Stair free route</label><br>
-
 			<input type="checkbox" id="noSlope" name="noSlope" value="NoSlope" onclick="window.parent.changeTravelModeAccess()">
 			<label for="NoSlope">Avoid steep slopes</label><br>
 
 			<input type="checkbox" id="simplify" name="simplifyR" value="simplifyR" onclick="window.parent.changeTravelModeAccess()">
 			<label for="accessE">Simplify route</label><br>
-
-			<input type="checkbox" id="accessE" name="accessE" value="accessEntrance" onclick="window.parent.changeEntrances()">
-			<label for="accessE">Only navigate to accessible entrances</label><br>
-
+			
 			<b style='font-size:16px'>Navigation Aids</b><br>
 
 			<input type="checkbox" id="highcont" name="highcont" value="HighContrast"
