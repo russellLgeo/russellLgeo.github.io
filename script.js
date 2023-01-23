@@ -764,22 +764,22 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 					  color: [5, 150, 255],
 					  width: 3
 					};
-					directionsHTML = ''
-					
-					for (i=0; i < chosenDirections.length; i++) {
-						
-						lengthnum = Math.round(chosenDirections[i].attributes.length)
-
-						if (i !=0 && i != chosenDirections.length - 1 && !chosenDirections[i].attributes.text.includes("then")) {
-
-							directionsHTML += chosenDirections[i].attributes.text + " and continue for " + lengthnum.toString() + " metres <br>" + "<br>"
-						}else{
-							directionsHTML += chosenDirections[i].attributes.text + "<br>" + "<br>"
-						}
-					}
-					
-					document.getElementById("directionsBox").style.display = "block";
-					document.getElementById("directions").innerHTML = directionsHTML
+//					directionsHTML = ''
+//					
+//					for (i=0; i < chosenDirections.length; i++) {
+//						
+//						lengthnum = Math.round(chosenDirections[i].attributes.length)
+//
+//						if (i !=0 && i != chosenDirections.length - 1 && !chosenDirections[i].attributes.text.includes("then")) {
+//
+//							directionsHTML += chosenDirections[i].attributes.text + " and continue for " + lengthnum.toString() + " metres <br>" + "<br>"
+//						}else{
+//							directionsHTML += chosenDirections[i].attributes.text + "<br>" + "<br>"
+//						}
+//					}
+//					
+//					document.getElementById("directionsBox").style.display = "block";
+//					document.getElementById("directions").innerHTML = directionsHTML
 					view.graphics.removeAll();
 					view.graphics.add(chosenRoute);
 					view.goTo(chosenRoute.geometry.extent)
@@ -789,55 +789,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}) 
 		    
 			route.solve(routeUrl, routeParams).catch(function(data){
-				
-				origGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][0]['geometry']
-				destGeom = JSON.parse(data.details['requestOptions']['query']['stops'])['features'][1]['geometry']
-				stopArray1Adj = []
-				stopArray2Adj = []
-				
-				if (stopArray1.length > 1) {
-					for (i =0; i < stopArray1.length; i++) {
-						
-						
-						if (stopArray1[i]['geometry']['x'] != origGeom['x'] &&
-						    stopArray1[i]['geometry']['y'] != origGeom['y']
-						   ) {
-							stopArray1Adj.push(stopArray1[i])
-							
-							
-						}
-					}
-					
-				}
-				
-			    if (stopArray2.length > 1) {
-					for (i =0; i < stopArray2.length; i++) {
-						if (stopArray2[i]['geometry']['x'] != destGeom['x'] &&
-						    stopArray2[i]['geometry']['y'] != destGeom['y']
-						   ) {
-							stopArray2Adj.push(stopArray2[i])
-							
-
-						}
-					}
-					
-				}
-				if (stopArray1Adj.length > 0 && stopArray2Adj.length > 0) {
-					
-					routeResults(stopArray1Adj,stopArray2Adj)
-					
-				}
-				else if (stopArray1Adj.length > 0) {
-					console.log(stopArray1Adj)
-					console.log(stopArray2)
-					routeResults(stopArray1Adj,stopArray2)
-				}
-				else if (stopArray2Adj.length > 0) {
-					console.log(stopArray1)
-					console.log(stopArray2Adj)
-					routeResults(stopArray1,stopArray2Adj)
-				}
-				
+				alert('Cannot find route between these two points')
 			})
 	}
 	accessibleOn = false 
