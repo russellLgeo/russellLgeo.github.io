@@ -1,29 +1,24 @@
 <head>
    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
-<!--
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.39/moment-timezone-with-data.min.js"></script>
-	
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
-	<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
--->
 	<script src="https://js.arcgis.com/4.23/"></script>
-        <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
-    
-    </style>
-    <script src='script.js'></script>
+    <script>
+      require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
+
+      });
+    </script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
+
+	<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+   
 </head>
 <body>
-<!--
 <div id='logo'>UBC Logo Here</div>
 <div class="topnav">
   <a href="#contact">Contact</a>
@@ -31,9 +26,7 @@
 </div>
 
 <div id='searchBoxes'></div>
--->
 <div id='viewDiv'></div>
-<!--
 <div id="topButtons">
 <button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
 	<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
@@ -97,8 +90,7 @@
 	</div>
 	<button id="speak">Speak Text</button>
 </div>
--->
 
 	
-
+<script src='script.js'></script>
 </body>
