@@ -26,18 +26,13 @@
 </div>
 
 <div id='searchBoxes'></div>
+<!--<div id="directionsBoxExpand"></div>-->
 <div id='viewDiv'></div>
 <div id="topButtons">
 <button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
 	<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
 	<br/>
 	<b style='font-size:12px; white-space:pre'>Directions</b>
-</button>
-<button title="Settings" id='settingsButton' class = 'topButton' type="button" onclick = "window.parent.toggleAccessBox()">
-	<img id ='settingImage' class='topImage' src="svgs/noun-gear-4602778.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:12px; white-space:pre'> Settings </b>
-	
 </button>
 </div>
 <div id='travelmodeBox'>
@@ -60,37 +55,8 @@
 	<b style='font-size:11px; white-space:pre'>Bike / Roll </b>
 	</button>
 	<div id="trackingBox"><b>Track my location </b></div>
-</div>
-
-<div id="hiddenMenus">
-		<div id='accessBox'>
-			<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
-			<div id="accesscontent" style="padding-left:5px">
-			<b style='font-size:16px'>Custom Navigation</b><br>
-			<input type="checkbox" id="noSlope" name="noSlope" value="NoSlope" onclick="window.parent.changeTravelModeAccess()">
-			<label for="NoSlope">Avoid steep slopes</label><br>
-
-			<input type="checkbox" id="simplify" name="simplifyR" value="simplifyR" onclick="window.parent.changeTravelModeAccess()">
-			<label for="accessE">Simplify route</label><br>
-			
-			<b style='font-size:16px'>Navigation Aids</b><br>
-
-			<input type="checkbox" id="highcont" name="highcont" value="HighContrast"
-				   onclick="window.parent.switchBasemaps()">
-			<label for="HighContrast">High Contrast Visibility</label><br>
-		</div>
-	</div>
-	<div id='layerList'></div>
 	
 </div>
-
-<div id='directionsBox'>
-	<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">
-	<div id='directions'>
-	</div>
-	<button id="speak">Speak Text</button>
-</div>
-
 	
 <script src='script.js'></script>
 </body>
