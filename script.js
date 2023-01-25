@@ -76,9 +76,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
         container: "viewDiv",
     });
 	
+	
 	//Remove the zoom from the map
 	view.ui.remove("zoom");
-	
 	var poiFL = new FeatureLayer({
 		url:poiForBasemapUrl,
 		//url: poiForBasemapUrl,
@@ -142,6 +142,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		  container:'trackingBox',
 		  visible:true
      });
+	//Remove the zoom from the map
+	view.ui.remove("zoom");
     view.ui.add(track);
 	const directionsAction = {
 	  title: "Directions",
