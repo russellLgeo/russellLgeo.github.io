@@ -143,7 +143,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		  visible:true
      });
 	//Remove the zoom from the map
-	view.ui.remove("zoom");
+	
     view.ui.add(track);
 	const directionsAction = {
 	  title: "Directions",
@@ -461,7 +461,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		position: "top-left",
 		index: 10
 	});	
-	
+	view.ui.remove("zoom");
 	settingsDiv = document.createElement("div")
 	settingsDiv.id = "accessBox"
 	settingsDiv.style.visibility = 'block'
@@ -473,6 +473,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		expandIconClass:"esri-icon-settings2",
 		expandTooltip: "Show additional custom ",
 	  	content: settingsDiv,
+	    mode: "floating",
 		visible: false
 	});
 	
@@ -492,6 +493,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		expandIconClass:"esri-icon-documentation",
 		expandTooltip: "Show written directions",
 	  	content: directionsDiv,
+		mode: "floating",
 		visible: false
 	});
 	
