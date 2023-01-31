@@ -187,12 +187,14 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}else {
 			simplifyStr = ""
 		}
-		if (document.getElementById("simplify").checked == true) {
+		if (document.getElementById("noSlope").checked == true) {
 			steepStr = " No Slopes"
 		}else {
 			steepStr = ""
 		}
+		console.log(baseMode)
 		theMode = baseMode + steepStr + simplifyStr
+		console.log(theMode)
 		getTravelMode(theMode).then(function()
 		{
 			if (stopArray1.length > 0 && stopArray2.length > 0) {
@@ -202,12 +204,15 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		})
 	}
 	
-	window.changeTravelMode = function(baseMode){
+	window.changeTravelMode = function(bMode){
+		baseMode = bMode
 		theMode = baseMode + steepStr + simplifyStr
+		console.log('in here')
 		if (baseMode == "Walking"){
 			document.getElementById("walkButton").style.backgroundColor = "#0680A6"
 			document.getElementById("accessButton").style.backgroundColor = ""
 			document.getElementById("bikeButton").style.backgroundColor = ""
+			document.getElementById("driveButton").style.backgroundColor = ""
 			
 			getTravelMode(theMode).then(function() {
 				changeEntrances("all")
@@ -219,6 +224,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			document.getElementById("walkButton").style.backgroundColor = ""
 			document.getElementById("accessButton").style.backgroundColor = "#0680A6"
 			document.getElementById("bikeButton").style.backgroundColor = ""
+			document.getElementById("driveButton").style.backgroundColor = ""
 			
 			getTravelMode(theMode).then(function() {
 				changeEntrances("accessible")
@@ -228,6 +234,17 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			document.getElementById("walkButton").style.backgroundColor = ""
 			document.getElementById("accessButton").style.backgroundColor = ""
 			document.getElementById("bikeButton").style.backgroundColor = "#0680A6"
+			document.getElementById("driveButton").style.backgroundColor = ""
+			getTravelMode(theMode).then(function() {
+				changeEntrances("all")
+			})
+			
+		}
+		if (baseMode == "Driving"){
+			document.getElementById("walkButton").style.backgroundColor = ""
+			document.getElementById("accessButton").style.backgroundColor = ""
+			document.getElementById("bikeButton").style.backgroundColor = ""
+			document.getElementById("driveButton").style.backgroundColor = "#0680A6"
 			getTravelMode(theMode).then(function() {
 				changeEntrances("all")
 			})
@@ -236,8 +253,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	}
 	
 	
-	document.getElementById('travelmodeBox').style.display = 'none'
-	document.getElementById('trackingBox').style.display = 'none'
+	//document.getElementById('travelmodeBox').style.display = 'none'
+	//document.getElementById('trackingBox').style.display = 'none'
 	
 	window.toggleDirections = function() {
 		
@@ -248,6 +265,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			document.getElementById('trackingBox').style.display = 'block'
 			searchWidget2.visible = true
 			directionsExpand.visible = true
+			
 			settingsExpand.visible = true
 			directionsMode = true
 			
@@ -701,6 +719,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		    routeParams.pointBarriers = routeLayer.pointBarriers
 			
 			route.solve(routeUrl, routeParams).then(function(data) {
+				
 				var routeLength = 0
 				data.routeResults.forEach(function(result) { 
 					
@@ -736,6 +755,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 					}
 					
 					document.getElementById("directionsBox").innerHTML = directionsHTML
+					
 					view.graphics.removeAll();
 					view.graphics.add(chosenRoute);
 					view.goTo(chosenRoute.geometry.extent)
