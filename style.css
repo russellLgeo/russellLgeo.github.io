@@ -70,10 +70,10 @@
 @media (max-width: 600px) {
 	#trackingBox {
 	 margin-top: auto;
-     width: 60%;
+/*     width: 60%;*/
   	}
 	#travelmodeBox {
-		right:9%;
+/*		right:9%;*/
 	}
 }
 
