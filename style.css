@@ -54,6 +54,7 @@
 	position:fixed;
 	top:130px;
 	left:305px;
+	width:200px;
 	z-index:1;
 	display:none;
 	flex-wrap: wrap;
