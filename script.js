@@ -769,9 +769,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			}) 
 		    
-//			route.solve(routeUrl, routeParams).catch(function(data){
-//				alert('Cannot find route between these two points')
-//			})
+			route.solve(routeUrl, routeParams).catch(function(data){
+				alert('Cannot find route between these two location')
+			})
 	}
 	
     window.changeEntrances = function(entranceMode) {
