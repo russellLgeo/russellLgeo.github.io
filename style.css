@@ -23,7 +23,7 @@
 	padding-top:2.5px;
 	background-color:#ffffff;
 	border-radius:10px;
-	width:76px
+	width:76px;
 }
 .topButton:hover {
 	cursor: pointer;
@@ -54,10 +54,13 @@
 }
 @media (max-width: 600px) {
 	#topButtons {
-		right:10%
+		right:10%;
 	}
 	#travelmodeBox {
-		right:10%;*/
+		right:10%;
+	}
+	.topButton {
+		width:70px;
 	}
 }
 
