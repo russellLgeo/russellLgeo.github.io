@@ -277,7 +277,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			directionsExpand.visible = false
 			//track.visible = false
 			settingsExpand.visible = false
-			searchWidget2.clear()	
+			searchWidget2.clear()
+			document.getElementById("directionsBox").innerHTML = ""
+			view.graphics.removeAll();
 			directionsMode = false
 		}
 		
@@ -489,7 +491,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	settingsExpand = new Expand({
 		view: view,
 		expandIconClass:"esri-icon-settings2",
-		expandTooltip: "Show additional custom ",
+		expandTooltip: "Show additional custom settings",
 	  	content: settingsDiv,
 	    mode: "floating",
 		visible: false
