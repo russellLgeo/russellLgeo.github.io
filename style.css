@@ -52,28 +52,12 @@
     justify-content: center;
 	
 }
-#trackingBox {
-	padding-top:5px;
-	
-	width:150px;
-	height:30px;
-	left:365px;
-	top:130px;
-	display:none;
-	flex-wrap: wrap;
-    justify-content: left;
-	border-radius:10px;
-	border-width:2px;
-	border-style:solid;
-	border-color:black;
-}
 @media (max-width: 600px) {
-	#trackingBox {
-	 margin-top: auto;
-/*     width: 60%;*/
-  	}
+	#topButtons {
+		right:10%
+	}
 	#travelmodeBox {
-/*		right:9%;*/
+		right:10%;*/
 	}
 }
 
