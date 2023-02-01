@@ -253,16 +253,16 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	}
 	
 	
-	//document.getElementById('travelmodeBox').style.display = 'none'
-	//document.getElementById('trackingBox').style.display = 'none'
+	document.getElementById('travelmodeBox').style.display = 'none'
+	document.getElementById('trackingBox').style.display = 'none'
 	
 	window.toggleDirections = function() {
 		
 		if (document.getElementById('travelmodeBox').style.display == 'none') {
 			
-			document.getElementById('travelmodeBox').style.display = 'block'
+			document.getElementById('travelmodeBox').style.display = 'flex'
 			document.getElementById('directionsButton').style.backgroundColor = "#0680A6"
-			document.getElementById('trackingBox').style.display = 'block'
+			document.getElementById('trackingBox').style.display = 'flex'
 			searchWidget2.visible = true
 			directionsExpand.visible = true
 			
