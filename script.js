@@ -137,14 +137,13 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	var track = new Track({
           view: view,
-		  
+		  visible:false,
 		  useHeadingEnabled: true,
-		  container:'trackingBox',
-		  visible:true
+		  //container:'trackingBox',
      });
 	//Remove the zoom from the map
 	
-    view.ui.add(track);
+   
 	const directionsAction = {
 	  title: "Directions",
 	  id: "directions",
@@ -254,7 +253,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	
 	document.getElementById('travelmodeBox').style.display = 'none'
-	document.getElementById('trackingBox').style.display = 'none'
+	//document.getElementById('trackingBox').style.display = 'none'
 	
 	window.toggleDirections = function() {
 		
@@ -262,10 +261,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			
 			document.getElementById('travelmodeBox').style.display = 'flex'
 			document.getElementById('directionsButton').style.backgroundColor = "#0680A6"
-			document.getElementById('trackingBox').style.display = 'flex'
+			//document.getElementById('trackingBox').style.display = 'flex'
 			searchWidget2.visible = true
 			directionsExpand.visible = true
-			
+			track.visible = true
 			settingsExpand.visible = true
 			directionsMode = true
 			
@@ -273,9 +272,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			
 			document.getElementById('travelmodeBox').style.display = 'none'
 			document.getElementById('directionsButton').style.backgroundColor = ""
-			document.getElementById('trackingBox').style.display = 'none'
+			//document.getElementById('trackingBox').style.display = 'none'
 			searchWidget2.visible = false
 			directionsExpand.visible = false
+			track.visible = false
 			settingsExpand.visible = false
 			searchWidget2.clear()	
 			directionsMode = false
@@ -521,6 +521,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 	});	
 	
+	 view.ui.add(track, {
+		 position: "top-left"
+	 })
 	 expandHandle1 = watchUtils.pausable(directionsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
           expandHandle1.pause();
