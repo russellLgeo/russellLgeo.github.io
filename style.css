@@ -55,10 +55,11 @@
 	display:none;
 	flex-wrap: wrap;
     justify-content: center;
+	
 }
 #trackingBox {
 	padding-top:5px;
-	margin-top: auto;
+	
 	width:150px;
 	height:30px;
 	left:365px;
@@ -72,9 +73,13 @@
 	border-color:black;
 }
 @media (max-width: 600px) {
-  #trackingBox {
-    width: 70px;
-  }
+	#trackingBox {
+		margin-top: auto;
+     width: 60%;
+  	}
+	#travelmodeBox {
+		right:5%;
+	}
 }
 .travelButton {
 	padding-left:12px;
