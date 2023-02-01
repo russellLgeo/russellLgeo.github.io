@@ -54,7 +54,7 @@
 	z-index:1;
 	display:none;
 	flex-wrap: wrap;
-    justify-content: right;
+    justify-content: center;
 }
 #trackingBox {
 	padding-top:5px;
