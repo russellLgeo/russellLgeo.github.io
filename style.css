@@ -54,10 +54,10 @@
 }
 @media (max-width: 600px) {
 	#topButtons {
-		right:10%;
+		right:5%;
 	}
 	#travelmodeBox {
-		right:10%;
+		right:5%;
 	}
 	.topButton {
 		width:70px;
