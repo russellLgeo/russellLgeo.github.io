@@ -137,7 +137,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	var track = new Track({
           view: view,
-		  visible:false,
+		  visible:true,
 		  useHeadingEnabled: true,
 		  //container:'trackingBox',
      });
@@ -264,7 +264,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			//document.getElementById('trackingBox').style.display = 'flex'
 			searchWidget2.visible = true
 			directionsExpand.visible = true
-			track.visible = true
+			//track.visible = true
 			settingsExpand.visible = true
 			directionsMode = true
 			
@@ -275,7 +275,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			//document.getElementById('trackingBox').style.display = 'none'
 			searchWidget2.visible = false
 			directionsExpand.visible = false
-			track.visible = false
+			//track.visible = false
 			settingsExpand.visible = false
 			searchWidget2.clear()	
 			directionsMode = false
