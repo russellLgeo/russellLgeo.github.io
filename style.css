@@ -1,11 +1,27 @@
+.topnav {
+  background-color: #002145;
+  overflow: hidden;
+  
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  font-family: Arial;
+  float: right;
+}
+
 #viewDiv {
 	padding: 0;
 	margin: 0;
 	height: 95%;
 	width: 100%;
 	z-index:-8;
-}
-#searchBoxes {
 }
 #topButtons {
 	position:fixed;
@@ -34,14 +50,6 @@
 	width:30px;
 	height:30px;
 }
-#walkImage {
-	padding-left:14px;
-	padding-right:14px;
-}
-#settingImage {
-	padding-left:15px;
-	padding-right:14px;
-}
 #travelmodeBox {
 	position:fixed;
 	top:130px;
@@ -49,39 +57,20 @@
 	z-index:1;
 	display:none;
 	flex-wrap: wrap;
-    justify-content: center;
-	
+    justify-content: left;
 }
 @media (max-width: 600px) {
 	#topButtons {
-		right:5%;
+		right:10%;
 	}
 	#travelmodeBox {
-		right:5%;
+		right:10%;
 	}
 	.topButton {
 		width:70px;
 	}
 }
 
-/* Add a black background color to the top navigation */
-.topnav {
-  background-color: #002145;
-  overflow: hidden;
-  
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-  font-family: Arial;
-  float: right;
-}
 #directions {
 	background-color: #ffffff;
 	width:200px;
@@ -104,22 +93,9 @@
 	
 }
 
-#locationButton {
-	position:absolute;
-	top:113px;
-	left:263px;
-	height:32px;
-	background-color: #ffffff;
-	z-index:2;
-/*	display:block;*/
-}
-
 a {
 	color: #00A8E0
 }
 .w3-bar {
 	background-color:'#002145'
-}
-.esri-expand-widget__button::before {
-    content: "Expand";
 }

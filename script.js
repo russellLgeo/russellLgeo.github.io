@@ -50,6 +50,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	var destFocus = true
 	var prevsterm1 = null
 	var prevsterm2 = null
+	var alerted = false
 	//Basemap 
 	var webmap = new WebMap({
         portalItem: {
@@ -724,7 +725,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		    routeParams.pointBarriers = routeLayer.pointBarriers
 			
 			route.solve(routeUrl, routeParams).then(function(data) {
-				
+				alerted = false
 				var routeLength = 0
 				data.routeResults.forEach(function(result) { 
 					
@@ -770,7 +771,12 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}) 
 		    
 			route.solve(routeUrl, routeParams).catch(function(data){
-				alert('Cannot find route between these two location')
+				if (alerted === false) {
+					alert('Cannot find route between these two location')
+					alerted = true
+				}
+				
+				
 			})
 	}
 	
