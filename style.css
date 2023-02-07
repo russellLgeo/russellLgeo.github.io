@@ -6,6 +6,7 @@
 
 /* Style the links inside the navigation bar */
 .topnav a {
+/*  height:2vh;*/
   float: left;
   color: #f2f2f2;
   text-align: center;
@@ -19,7 +20,7 @@
 #viewDiv {
 	padding: 0;
 	margin: 0;
-	height: 95%;
+	height: 94.5%;
 	width: 100%;
 	z-index:-8;
 }
@@ -71,6 +72,11 @@
 	.topButton {
 		width:70px;
 	}
+	.topnav a {
+		height:2vh;
+	}
+	viewDiv {
+		height: 98vh;
 }
 
 #directions {
