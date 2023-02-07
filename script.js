@@ -192,9 +192,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}else {
 			steepStr = ""
 		}
-		console.log(baseMode)
 		theMode = baseMode + steepStr + simplifyStr
-		console.log(theMode)
 		getTravelMode(theMode).then(function()
 		{
 			if (stopArray1.length > 0 && stopArray2.length > 0) {
@@ -207,7 +205,6 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	window.changeTravelMode = function(bMode){
 		baseMode = bMode
 		theMode = baseMode + steepStr + simplifyStr
-		console.log('in here')
 		if (baseMode == "Walking"){
 			document.getElementById("walkButton").style.backgroundColor = "#0680A6"
 			document.getElementById("accessButton").style.backgroundColor = ""
@@ -678,7 +675,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	//Function to test each entrance that was found
 	function routeResults(sArray1,sArray2) {
-		//console.log('in route results')
+		
 		//Only route if we have stops to test both to and from 
 		if (sArray1.length > 0 && sArray2.length > 0) {
 	
@@ -699,8 +696,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	}
 	//Function the tests the length of each route and returns the shortest one 
 	function getRoute(stop1,stop2,n) {
-			//console.log('in get route')
-			//routeLayer.polygonBarriers = polyBarriers
+
 			routeLayer.pointBarriers = pointBarriers
 			const routeParams = new RouteParameters({
 				returnRoutes: true,
@@ -725,7 +721,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		    routeParams.pointBarriers = routeLayer.pointBarriers
 			
 			route.solve(routeUrl, routeParams).then(function(data) {
-				alerted = false
+				
 				var routeLength = 0
 				data.routeResults.forEach(function(result) { 
 					
@@ -745,7 +741,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 					  color: [5, 150, 255],
 					  width: 3
 					};
-					//console.log('chose the route')
+				
 					directionsHTML = ''
 					
 					for (i=0; i < chosenDirections.length; i++) {
@@ -771,11 +767,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}) 
 		    
 			route.solve(routeUrl, routeParams).catch(function(data){
-				if (alerted === false) {
-					alert('Cannot find route between these two location')
-					alerted = true
-				}
 				
+				alert('Cannot find route between these two location')
+			
 				
 			})
 	}
