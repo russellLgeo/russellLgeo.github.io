@@ -25,8 +25,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736"
 	const constructionURL = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_Construction/FeatureServer/1"
 	const pointBarrierPortalID = "2cecb4a75ae34b3eb75b742eff0336f2"
-	//const UELBoundaryPortalID = "c555b2518ad141fdb1ad135da0250b24"
-	const UELBoundaryPortalID = "2ae63c795ddc4fe18cf2a677ab35790f"
+	const UELBoundaryPortalID = "c555b2518ad141fdb1ad135da0250b24"
+	//const UELBoundaryPortalID = "2ae63c795ddc4fe18cf2a677ab35790f"
 	//Global variables associated with travel modes
     
 	var tMode = getTravelMode("Walking")
@@ -110,7 +110,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			id: UELBoundaryPortalID
 		}
 	})
-	//view.map.add(boundaryFL)
+
 	//Construction point barriers
 	var pointBarrierfl = new FeatureLayer({
 		portalItem: {
@@ -524,24 +524,18 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		 useHeadingEnabled: false, // Don't change orientation of the map
 		 
 	 })
+	
+	
 	track.on("track", function(event) {
 		
-		var point = new Point({
-        x: -97.06130,
-        y: 32.834,
-        spatialReference: {
-            wkid: 4326
-        	}
-    	});
 		boundaryquery = new Query();
-  		boundaryquery.geometry = point;  
+  		boundaryquery.geometry = track.graphic.geometry;  
   		boundaryquery.spatialRelationship = "intersects";
 		boundaryFL.queryFeatures(boundaryquery).then(function(results) {
 			if (results.features.length > 0) {
 				track.goToLocationEnabled = true
-				alert('in tracking area')
-				track.start()
-			} else {
+				console.log('in tracking area')
+			}else {
 				track.goToLocationEnabled = false
 				alert('Tracking is only available on the UBC Vancouver Campus')
 				track.stop()
