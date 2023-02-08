@@ -5,8 +5,8 @@
 /*global document*/
 
 //ESRI modules used
-require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/widgets/Search", "esri/layers/RouteLayer","esri/rest/support/PolygonBarrier","esri/rest/support/FeatureSet","esri/rest/support/PointBarrier","esri/rest/support/RouteParameters","esri/rest/route","esri/layers/FeatureLayer","esri/rest/support/Query","esri/rest/support/Stop","esri/rest/support/RouteInfo","esri/core/Collection","esri/rest/support/TravelMode","esri/rest/networkService","esri/rest/support/DirectionPoint","esri/PopupTemplate","esri/widgets/LayerList","esri/widgets/Legend","esri/widgets/Locate","esri/widgets/Track","esri/widgets/Expand","esri/core/watchUtils"]
-, function (Graphic,esriConfig,WebMap,MapView,Search,RouteLayer,PolygonBarrier,FeatureSet,PointBarrier,RouteParameters,route,FeatureLayer,Query,Stop,RouteInfo,Collection,TravelMode,networkService,DirectionPoint,PopupTemplate,LayerList,Legend,Locate,Track,Expand,watchUtils) {
+require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/widgets/Search", "esri/layers/RouteLayer","esri/rest/support/PolygonBarrier","esri/rest/support/FeatureSet","esri/rest/support/PointBarrier","esri/rest/support/RouteParameters","esri/rest/route","esri/layers/FeatureLayer","esri/rest/support/Query","esri/rest/support/Stop","esri/rest/support/RouteInfo","esri/core/Collection","esri/rest/support/TravelMode","esri/rest/networkService","esri/rest/support/DirectionPoint","esri/PopupTemplate","esri/widgets/LayerList","esri/widgets/Legend","esri/widgets/Locate","esri/widgets/Track","esri/widgets/Expand","esri/core/watchUtils","esri/geometry/Point"]
+, function (Graphic,esriConfig,WebMap,MapView,Search,RouteLayer,PolygonBarrier,FeatureSet,PointBarrier,RouteParameters,route,FeatureLayer,Query,Stop,RouteInfo,Collection,TravelMode,networkService,DirectionPoint,PopupTemplate,LayerList,Legend,Locate,Track,Expand,watchUtils,Point) {
 	
 	
 	//API key and portal URL 
@@ -25,7 +25,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736"
 	const constructionURL = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_Construction/FeatureServer/1"
 	const pointBarrierPortalID = "2cecb4a75ae34b3eb75b742eff0336f2"
-	
+	//const UELBoundaryPortalID = "c555b2518ad141fdb1ad135da0250b24"
+	const UELBoundaryPortalID = "2ae63c795ddc4fe18cf2a677ab35790f"
 	//Global variables associated with travel modes
     
 	var tMode = getTravelMode("Walking")
@@ -104,16 +105,12 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		url: poiForSearchUrl
 	})
 
-	 	//Construction polygons
-//	var polyBarrierfl = new FeatureLayer({
-//		url:constructionURL,
-//		title: "Construction",
-//		visible: false,
-//		popupEnabled: false
-//		
-//	})
-//	view.map.add(polyBarrierfl)
-//	
+	var boundaryFL = new FeatureLayer({
+		portalItem: {
+			id: UELBoundaryPortalID
+		}
+	})
+	//view.map.add(boundaryFL)
 	//Construction point barriers
 	var pointBarrierfl = new FeatureLayer({
 		portalItem: {
@@ -140,8 +137,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	var track = new Track({
           view: view,
 		  visible:true,
-		  useHeadingEnabled: true,
-		  //container:'trackingBox',
+		  useHeadingEnabled: false,
+		  goToLocationEnabled:false
      });
 	//Remove the zoom from the map
 	
@@ -524,10 +521,34 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	 view.ui.add(track, {
 		 position: "top-left",
-		 useHeadingEnabled: false // Don't change orientation of the map
-
-//		 goToLocationEnabled:false
+		 useHeadingEnabled: false, // Don't change orientation of the map
+		 
 	 })
+	track.on("track", function(event) {
+		
+		var point = new Point({
+        x: -97.06130,
+        y: 32.834,
+        spatialReference: {
+            wkid: 4326
+        	}
+    	});
+		boundaryquery = new Query();
+  		boundaryquery.geometry = point;  
+  		boundaryquery.spatialRelationship = "intersects";
+		boundaryFL.queryFeatures(boundaryquery).then(function(results) {
+			if (results.features.length > 0) {
+				track.goToLocationEnabled = true
+				alert('in tracking area')
+				track.start()
+			} else {
+				track.goToLocationEnabled = false
+				alert('Tracking is only available on the UBC Vancouver Campus')
+				track.stop()
+			}
+		});
+	})
+
 	 expandHandle1 = watchUtils.pausable(directionsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
           expandHandle1.pause();
@@ -541,7 +562,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
           settingsExpand.collapse();
         }
       });
-
+	
       expandHandle2 = watchUtils.pausable(settingsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
           expandHandle2.pause();
