@@ -18,6 +18,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	const routePortalID = "b1846c8638bb4d679bd06f120c87825b"
 	const steepSlopeSegmentPortalID = "159428d89f3b412cae133a5e8c2a11ba"
 	const poiForBasemapUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Hosted/ubcv_poi_POI_view/FeatureServer/0"
+	const poiForHighContrastUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Hosted/ubcv_poi_highcontrast_POI_view/FeatureServer/0'
 	const poiForSearchUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_wayfinding_test/FeatureServer/1"
 	const crosswalkUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_wayfinding_test/FeatureServer/0"
 	const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8"
@@ -82,10 +83,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	view.ui.remove("zoom");
 	var poiFL = new FeatureLayer({
 		url:poiForBasemapUrl,
-		//url: poiForBasemapUrl,
 		listMode: 'hide',
 		popupEnabled:true
 	})
+	
 	view.map.add(poiFL)
 	
 	var slopeFL = new FeatureLayer({
@@ -104,15 +105,15 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	})
 
 	 	//Construction polygons
-	var polyBarrierfl = new FeatureLayer({
-		url:constructionURL,
-		title: "Construction",
-		visible: false,
-		popupEnabled: false
-		
-	})
-	view.map.add(polyBarrierfl)
-	
+//	var polyBarrierfl = new FeatureLayer({
+//		url:constructionURL,
+//		title: "Construction",
+//		visible: false,
+//		popupEnabled: false
+//		
+//	})
+//	view.map.add(polyBarrierfl)
+//	
 	//Construction point barriers
 	var pointBarrierfl = new FeatureLayer({
 		portalItem: {
@@ -522,7 +523,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	});	
 	
 	 view.ui.add(track, {
-		 position: "top-left"
+		 position: "top-left",
+		 useHeadingEnabled: false // Don't change orientation of the map
+
+//		 goToLocationEnabled:false
 	 })
 	 expandHandle1 = watchUtils.pausable(directionsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
@@ -843,6 +847,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			 });
 			view.map = webmap2 
+			poiFL.url = poiForHighContrastUrl
+			//poiFL.popupTemplate = popupTemplate
+			view.map.add(poiFL)
 			webmap = webmap2
 		}else {
 			var webmap3 = new WebMap({
@@ -851,6 +858,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			 });
 			view.map = webmap3 
+			poiFL.url = poiForBasemapUrl
+			view.map.add(poiFL)
 			webmap = webmap3
 		}
 	}
@@ -879,7 +888,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		// Normal range check using an inclusive start time and exclusive end time
 		check = now.isBetween(storeOpenTime, storeCloseTime, null, '[)');
 	  }
-	
+	  
 	  return check ? "Open" : "Closed";
 	}
 	//TODO: fringe cases such as Summer, By Appointmnent
