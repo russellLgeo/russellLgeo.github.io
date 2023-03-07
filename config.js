@@ -1,0 +1,15 @@
+const basemapPortalID = "edec0b0428134a69b6954659ffb77777" //Default basemap portal id 
+const highContrastPortalID = "c73f7396554943339a2208a1013cefc9" //High contrast basemap portal id 
+//const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8" //Old default basemap portal id 
+//const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736" //Old High contrast basemap portal id 
+const routeUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Multimodal/NAServer/Route' //Routing service URL
+const routePortalID = "b1846c8638bb4d679bd06f120c87825b"  //Routing service portal ID
+const steepSlopeSegmentPortalID = "159428d89f3b412cae133a5e8c2a11ba" //Feature layer of routing segments that have been identified as steep
+const poiForBasemapUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/ubcv_wayfind_poi/FeatureServer/1" //Unified POI feature layer
+const poiForHighContrastUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/ubcv_wayfind_poi/FeatureServer/1" //Unified POI feature layer
+const poiForSearchUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/ubcv_wayfind_poi/FeatureServer/1" //Unified POI feature layer
+const poiPolyUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/ubcv_wayfind_poi/FeatureServer/2"
+const crosswalkUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_wayfinding_test/FeatureServer/0" //Crosswalk table to link building and entrances
+const constructionURL = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_Construction/FeatureServer/1" //Construction polygons displayed on the map 
+const pointBarrierPortalID = "2cecb4a75ae34b3eb75b742eff0336f2" //Construction polygons converted to point barriers
+const UELBoundaryPortalID = "c555b2518ad141fdb1ad135da0250b24" //UEL boundary that is used to geofence the tracking functionality 

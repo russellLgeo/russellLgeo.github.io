@@ -1,34 +1,17 @@
 /*global $*/
-/*global d3*/
 /*global require*/
 /*global console*/
 /*global document*/
 
 //ESRI modules used
-require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/widgets/Search", "esri/layers/RouteLayer","esri/rest/support/PolygonBarrier","esri/rest/support/FeatureSet","esri/rest/support/PointBarrier","esri/rest/support/RouteParameters","esri/rest/route","esri/layers/FeatureLayer","esri/rest/support/Query","esri/rest/support/Stop","esri/rest/support/RouteInfo","esri/core/Collection","esri/rest/support/TravelMode","esri/rest/networkService","esri/rest/support/DirectionPoint","esri/PopupTemplate","esri/widgets/LayerList","esri/widgets/Legend","esri/widgets/Locate","esri/widgets/Track","esri/widgets/Expand","esri/core/watchUtils","esri/geometry/Point"]
-, function (Graphic,esriConfig,WebMap,MapView,Search,RouteLayer,PolygonBarrier,FeatureSet,PointBarrier,RouteParameters,route,FeatureLayer,Query,Stop,RouteInfo,Collection,TravelMode,networkService,DirectionPoint,PopupTemplate,LayerList,Legend,Locate,Track,Expand,watchUtils,Point) {
-	
-	
+require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/widgets/Search", "esri/layers/RouteLayer","esri/rest/support/PolygonBarrier","esri/rest/support/FeatureSet","esri/rest/support/PointBarrier","esri/rest/support/RouteParameters","esri/rest/route","esri/layers/FeatureLayer","esri/rest/support/Query","esri/rest/support/Stop","esri/rest/support/RouteInfo","esri/core/Collection","esri/rest/support/TravelMode","esri/rest/networkService","esri/rest/support/DirectionPoint","esri/PopupTemplate","esri/widgets/LayerList","esri/widgets/Legend","esri/widgets/Locate","esri/widgets/Track","esri/widgets/Expand","esri/core/watchUtils","esri/geometry/Point","./config.js"]
+, function (Graphic,esriConfig,WebMap,MapView,Search,RouteLayer,PolygonBarrier,FeatureSet,PointBarrier,RouteParameters,route,FeatureLayer,Query,Stop,RouteInfo,Collection,TravelMode,networkService,DirectionPoint,PopupTemplate,LayerList,Legend,Locate,Track,Expand,watchUtils,Point,config) {
+
 	//API key and portal URL 
     esriConfig.apiKey = "AAPK276cbb0d0adb46dd84559e3cc629b9ecltTU1snes6ZLNVPJfKUtP-Fy__eVTdXbkAxnPvlbd9t8BwVyimdY_FonEXjhEnCg";
 	esriConfig.portalUrl = "https://portal.gis.ubc.ca/arcgis";
 	
-	const synth = window.speechSynthesis;
-	const routeUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Multimodal/NAServer/Route'
-	const routePortalID = "b1846c8638bb4d679bd06f120c87825b"
-	const steepSlopeSegmentPortalID = "159428d89f3b412cae133a5e8c2a11ba"
-	const poiForBasemapUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Hosted/ubcv_poi_POI_view/FeatureServer/0"
-	const poiForHighContrastUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Hosted/ubcv_poi_highcontrast_POI_view/FeatureServer/0'
-	const poiForSearchUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_wayfinding_test/FeatureServer/1"
-	const crosswalkUrl = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_wayfinding_test/FeatureServer/0"
-	const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8"
-	const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736"
-	const constructionURL = "https://ags.gis.ubc.ca/arcgis/rest/services/Wayfinding/ubcv_Construction/FeatureServer/1"
-	const pointBarrierPortalID = "2cecb4a75ae34b3eb75b742eff0336f2"
-	const UELBoundaryPortalID = "c555b2518ad141fdb1ad135da0250b24"
-	//const UELBoundaryPortalID = "2ae63c795ddc4fe18cf2a677ab35790f"
-	//Global variables associated with travel modes
-    
+	//Global variables associated with setting the travel mode 
 	var tMode = getTravelMode("Walking")
 	var baseMode = "Walking"
 	document.getElementById("walkButton").style.backgroundColor = "#0680A6"
@@ -53,14 +36,16 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	var prevsterm1 = null
 	var prevsterm2 = null
 	var alerted = false
-	//Basemap 
+	
+	//Default basemap 
 	var webmap = new WebMap({
+
         portalItem: {
           id: basemapPortalID
         }
      });
 	
-	//Crosswalk table
+	//Crosswalk table, used to associate a POI with an entrance 
 	var crosswalkTable = new FeatureLayer({
         url: crosswalkUrl
      });
@@ -79,17 +64,28 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
         container: "viewDiv",
     });
 	
-	
 	//Remove the zoom from the map
 	view.ui.remove("zoom");
+	
+	//Load in the clickable points of interest
 	var poiFL = new FeatureLayer({
 		url:poiForBasemapUrl,
 		listMode: 'hide',
-		popupEnabled:true
+		popupEnabled:true,
+		index:2
 	})
 	
+	//Load in the clickable polygons of interest (ie building footprints)
+	var poiPoly = new FeatureLayer({
+		url:poiPolyUrl,
+		popupEnabld:true,
+		index:0
+	})
+	view.map.add(poiPoly)
 	view.map.add(poiFL)
 	
+	//Slopes that have been identified as steep:
+	//TODO we want these to appear when the accessible travel mode is selected
 	var slopeFL = new FeatureLayer({
 		portalItem: {
 			id: steepSlopeSegmentPortalID
@@ -100,11 +96,15 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	})
 	view.map.add(slopeFL)
 	
-	
+	//The POIs that are used in the search bar, now these are the same as the 
+	//POIs that appear on the map 
 	var unifiedFL = new FeatureLayer({
 		url: poiForSearchUrl
 	})
-
+	
+	//A large polygon over the University Endowment Lands, used
+	//to geofence the tracking app and only enable it when the user
+	//is on campus. 
 	var boundaryFL = new FeatureLayer({
 		portalItem: {
 			id: UELBoundaryPortalID
@@ -118,12 +118,13 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}
 	})
 	
-	
+	//Go through the point barrier feature layer 
 	pointBarrierfl.queryFeatures().then(function(results){
 	  // prints the array of result graphics to the console
 	 
 	  pointBarriers = []
-	 
+	 	
+		//And turn them all into point barrier objects, push these into a list 
 		for (i = 0; i < results.features.length; i++) {
 			
 			aBarrier = new PointBarrier({ geometry: results.features[i].geometry})
@@ -134,22 +135,25 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 	})
 	
+	//Initialize the tracking widget
 	var track = new Track({
           view: view,
 		  visible:true,
 		  useHeadingEnabled: false,
-		  goToLocationEnabled:false
+		  goToLocationEnabled:false,
+		  arialabel:"Start tracking location",
+		  role:"Button"
      });
-	//Remove the zoom from the map
 	
-   
+	
+	//Create a directions action for the popup
 	const directionsAction = {
 	  title: "Directions",
 	  id: "directions",
 	  image: "svgs/noun-route-939679.svg"
 	};
 	
-	//Popup stuff
+	//Set the popup parameters 
 	view.popup = {
 	  dockEnabled: true,
 	  dockOptions: {
@@ -162,13 +166,126 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	  actions: [directionsAction],
 	  
 	};
-	
+	//Position the popup in the bottom left of the screen 
 	view.popup.set("dockOptions", {
               breakpoint: false,
               buttonEnabled: false,
               position: 'bottom-left'
     });
 	
+		//Popup stuff
+	function popupTemplating(feature) {
+		const div = document.createElement("div");
+		
+		let photourl = (feature.graphic.attributes.photourl === undefined ? feature.graphic.attributes.PHOTOURL : feature.graphic.attributes.photourl)
+		
+		let location = (feature.graphic.attributes.location === undefined ? feature.graphic.attributes.LOCATION : feature.graphic.attributes.location)
+		
+		let url = (feature.graphic.attributes.url === undefined ? feature.graphic.attributes.URL : feature.graphic.attributes.url)
+		
+		let hours = (feature.graphic.attributes.hours === undefined ? feature.graphic.attributes.HOURS : feature.graphic.attributes.hours)
+		
+		let contact = (feature.graphic.attributes.contact === undefined ? feature.graphic.attributes.CONTACT : feature.graphic.attributes.contact)
+		
+		
+
+				
+		if (photourl == null) {
+			photoHTML = ""
+		}else {
+		
+			errStr = "this.style.display='none'"
+			
+			photoHTML = '<img id="popupphoto" src=' + photourl+ ' onerror=' + errStr + '>' + "<br>" + "<br>"
+		}
+		if (location == null) {
+			locHTML = ""
+		}else {
+			locHTML = "Location: " + location + "<br>" + "<br>"
+		}
+		if (url == null) {
+			urlHTML = ""
+		}else {
+			urlHTML = '<a href="' + url + '" target="_blank">Website</a>' + "<br>"
+		}
+		if (hours == null) {
+			statusHTML = ""
+			hoursHTML = ""
+		}else {
+			hoursHTML = "<b>Hours</b><br>"
+			hoursStr = hours
+			if (hoursStr.includes(';')) {
+				hoursList = hoursStr.split(";")
+			}else {
+				hoursList = [hoursStr]
+			}
+			for (i=0; i < hoursList.length; i++) {
+				hoursHTML += hoursList[i] + "<br>" 
+			}
+			try {
+	
+			   status = openOrClosed(hoursList)
+			   if (status == "Closed") {
+				   statusHTML = '<p style="color:red">Location is: ' + status + '</p>'
+			   }else {
+				   statusHTML = '<p style="color:green">Location is: ' + status + '</p>'
+			   }
+			}
+			catch(err) {
+				statusHTML = ""
+			}
+		}
+		
+		if (contact == null) {
+			contactHTML = ""
+		}else {
+			contactHTML = "<br><b>Contacts</b><br>"
+			if (contact.includes(";") == false) {
+				contactHTML = contact
+			}else {
+				contactsList = contact.split(";")
+				for (i=0; i< contactsList.length; i++) {
+					contactHTML += contactsList[i] + "<br>"
+				}
+			}
+		}
+		div.innerHTML = photoHTML + locHTML + urlHTML + statusHTML + hoursHTML + contactHTML//'<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">' + 
+		return div;
+	}
+	//popupTemplate = new PopupTemplate()
+	popupTemplate = {title:"{PLACENAME}",
+					  outFields: ["*"],
+					 content:popupTemplating
+					}
+	poiPoly.popupTemplate = popupTemplate
+	poiFL.popupTemplate = popupTemplate
+	view.popup.on("trigger-action", (event) => {
+		  // Execute the measureThis() function if the measure-this action is clicked
+		  if (event.action.id === "directions") {
+			  window.toggleDirections()
+			
+			  if (destFocus) {
+				  searchWidget2.searchTerm = view.popup.title	
+			  }
+			  if (originFocus) {
+				  searchWidget1.searchTerm = view.popup.title	
+			  }
+			
+			  cursterm1 = searchWidget1.searchTerm
+			  cursterm2 = searchWidget2.searchTerm 
+			  if (cursterm1.searchTerm != '' && cursterm1 != prevsterm1) {
+
+				  searchWidget1.search()
+				  prevsterm1 = cursterm1
+				  
+			  }
+			  if (cursterm2.searchTerm != '' && cursterm2 != prevsterm2) {
+				 
+				  searchWidget2.search()
+				  prevsterm2 = cursterm2
+			  }
+		  }
+	});
 	
 	//Function to grab one of the travel modes
 	async function getTravelMode(fMode) {
@@ -261,7 +378,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			searchWidget2.visible = true
 			directionsExpand.visible = true
 			//track.visible = true
-			settingsExpand.visible = true
+			//settingsExpand.visible = true
 			directionsMode = true
 			
 		}else {
@@ -272,7 +389,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			searchWidget2.visible = false
 			directionsExpand.visible = false
 			//track.visible = false
-			settingsExpand.visible = false
+			//settingsExpand.visible = false
 			searchWidget2.clear()
 			document.getElementById("directionsBox").innerHTML = ""
 			view.graphics.removeAll();
@@ -299,120 +416,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	
 	timezone = "America/Vancouver"
 	
-	//Popup stuff
-	function popupTemplating(feature) {
-		const div = document.createElement("div");
-		
-		let photourl = (feature.graphic.attributes.photourl === undefined ? feature.graphic.attributes.PHOTOURL : feature.graphic.attributes.photourl)
-		
-		let location = (feature.graphic.attributes.location === undefined ? feature.graphic.attributes.LOCATION : feature.graphic.attributes.location)
-		
-		let url = (feature.graphic.attributes.url === undefined ? feature.graphic.attributes.URL : feature.graphic.attributes.url)
-		
-		let hours = (feature.graphic.attributes.hours === undefined ? feature.graphic.attributes.HOURS : feature.graphic.attributes.hours)
-		
-		let contact = (feature.graphic.attributes.contact === undefined ? feature.graphic.attributes.CONTACT : feature.graphic.attributes.contact)
-		
-		
 
-				
-		if (photourl == null) {
-			photoHTML = ""
-		}else {
-		
-			errStr = "this.style.display='none'"
-			
-			photoHTML = '<img id="popupphoto" src=' + photourl+ ' onerror=' + errStr + '>' + "<br>" + "<br>"
-		}
-		if (location == null) {
-			locHTML = ""
-		}else {
-			locHTML = "Location: " + location + "<br>" + "<br>"
-		}
-		if (url == null) {
-			urlHTML = ""
-		}else {
-			urlHTML = '<a href="' + url + '" target="_blank">Website</a>' + "<br>"
-		}
-		if (hours == null) {
-			statusHTML = ""
-			hoursHTML = ""
-		}else {
-			hoursHTML = "<b>Hours</b><br>"
-			hoursStr = hours
-			if (hoursStr.includes(';')) {
-				hoursList = hoursStr.split(";")
-			}else {
-				hoursList = [hoursStr]
-			}
-			for (i=0; i < hoursList.length; i++) {
-				hoursHTML += hoursList[i] + "<br>" 
-			}
-			try {
-	
-			   status = openOrClosed(hoursList)
-			   if (status == "Closed") {
-				   statusHTML = '<p style="color:red">Location is: ' + status + '</p>'
-			   }else {
-				   statusHTML = '<p style="color:green">Location is: ' + status + '</p>'
-			   }
-			}
-			catch(err) {
-				statusHTML = ""
-			}
-		}
-		
-		if (contact == null) {
-			contactHTML = ""
-		}else {
-			contactHTML = "<br><b>Contacts</b><br>"
-			if (contact.includes(";") == false) {
-				contactHTML = contact
-			}else {
-				contactsList = contact.split(";")
-				for (i=0; i< contactsList.length; i++) {
-					contactHTML += contactsList[i] + "<br>"
-				}
-			}
-		}
-		div.innerHTML = photoHTML + locHTML + urlHTML + statusHTML + hoursHTML + contactHTML//'<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">' + 
-		return div;
-	}
-	//popupTemplate = new PopupTemplate()
-	popupTemplate = {title:"{PLACENAME}",
-					  outFields: ["*"],
-					 content:popupTemplating
-					}
-	
-	poiFL.popupTemplate = popupTemplate
-	view.popup.on("trigger-action", (event) => {
-		  // Execute the measureThis() function if the measure-this action is clicked
-		  if (event.action.id === "directions") {
-			  window.toggleDirections()
-			
-			  if (destFocus) {
-				  searchWidget2.searchTerm = view.popup.title	
-			  }
-			  if (originFocus) {
-				  searchWidget1.searchTerm = view.popup.title	
-			  }
-			
-			  cursterm1 = searchWidget1.searchTerm
-			  cursterm2 = searchWidget2.searchTerm 
-			  if (cursterm1.searchTerm != '' && cursterm1 != prevsterm1) {
-
-				  searchWidget1.search()
-				  prevsterm1 = cursterm1
-				  
-			  }
-			  if (cursterm2.searchTerm != '' && cursterm2 != prevsterm2) {
-				 
-				  searchWidget2.search()
-				  prevsterm2 = cursterm2
-			  }
-		  }
-	});
-	
 
 	//The top search widget that acts as an origin in the routing 
 	var searchWidget1 = new Search({
@@ -427,7 +431,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
      		}),
 			//placeholder:"Search for a place",
 			placeholder:"Search for a place",
-			searchFields: ["placename"],
+			searchFields: ["placename","placename2","code"],
   			displayField:  "placename",
 			name: "POI Seach",
   			exactMatch: false,
@@ -436,7 +440,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}],
 		locationEnabled: false,
 		popupEnabled: true,
-		container:"searchBoxes"
+		container:"searchBoxes",
+		resultGraphicEnabled:true
 		//popupTemplate: popupTemplate
 	});
 	
@@ -453,7 +458,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				outFields: ["*"]
      		}),
 			placeholder:"Search for a place",
-			searchFields: ["placename"],
+			searchFields: ["placename","placename2","code"],
   			displayField: "placename",
 			name: "POI Seach",
   			exactMatch: false,
@@ -487,10 +492,11 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	settingsExpand = new Expand({
 		view: view,
 		expandIconClass:"esri-icon-settings2",
-		expandTooltip: "Show additional custom settings",
+		expandTooltip: "Show additional accessibility settings",
 	  	content: settingsDiv,
 	    mode: "floating",
-		visible: false
+		arialabel:"Show additional accessibility settings",
+		role:"Button"
 	});
 	
 	view.ui.add(settingsExpand, {
@@ -865,6 +871,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			poiFL.url = poiForHighContrastUrl
 			//poiFL.popupTemplate = popupTemplate
 			view.map.add(poiFL)
+			view.map.add(poiPoly)
 			webmap = webmap2
 		}else {
 			var webmap3 = new WebMap({
@@ -875,6 +882,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			view.map = webmap3 
 			poiFL.url = poiForBasemapUrl
 			view.map.add(poiFL)
+			view.map.add(poiPoly)
 			webmap = webmap3
 		}
 	}

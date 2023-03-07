@@ -2,6 +2,7 @@
    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=yes" />
+	<title>UBC Wayfinding Application</title>
     <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.39/moment-timezone-with-data.min.js"></script>
@@ -19,46 +20,57 @@
    
 </head>
 <body>
-<div id='logo'>UBC Logo Here</div>
-<div class="topnav">
-  <a href="#contact">Contact</a>
-  <a href="#about">About</a>
-</div>
-
-<div id='searchBoxes'></div>
-<!--<div id="directionsBoxExpand"></div>-->
-<div id='viewDiv'></div>
-<div id="topButtons">
-<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
-	<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:12px; white-space:pre'>Directions</b>
-</button>
-</div>
-<div id='travelmodeBox'>
-	
-	<button title="Walk / roll" id='walkButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Walking')">
-	<img class='topImage' id ='walkImage' src="svgs/noun-walk-341356.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:11px;'>Walk</b>
+<header>
+	<div id='logo'><img src="ubc-logo.png" alt="UBC Logo"></div>
+	<div class="topnav">
+	  <a href="#contact">Contact</a>
+	  <a href="#about">About</a>
+	</div>
+</header>
+<main>
+<section>
+	<h2>Search Box</h2>
+	<div id='searchBoxes'></div>
+</section>
+ <section>
+	<h2>Directions Button</h2>
+	<div id="topButtons">
+	<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
+		<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
+		<br/>
+		<b style='font-size:12px; white-space:pre'>Directions</b>
 	</button>
-	
-	<button title="Accessible" id='accessButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Accessible')">
-	<img class='topImage' id ='accessImage' src="svgs/noun-wheelchair-1258532.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:11px;'>Accessible</b>
-	</button>
-	<button title="Bike / Roll" id='bikeButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Biking')">
-	<img class='topImage' id ='bikeImage' src="svgs/noun-bike-4959317.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:11px;'>Bike / Roll</b>
-	</button>
-	<button title="Drive / Walk" id='driveButton' class='topButton' type="button" onclick = "window.parent.changeTravelMode('Driving')">
-	<img class='topImage' id ='driveImage' src="svgs/noun-car-2558234.svg" alt="buttonpng" border="0" />
-	<br/>
-	<b style='font-size:11px'>Drive / Walk</b>
-	</button>
-</div>
-	
+	</div>
+</section>
+<section>
+    <div id="travelmodeBox">
+        <button id="walkButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Walking')">
+          <img id="walkImage" class="topImage" src="svgs/noun-walk-341356.svg" alt="Walk icon" />
+          <br />
+          <span class="buttonText">Walk</span>
+        </button>
+        <button id="accessButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Accessible')">
+          <img id="accessImage" class="topImage" src="svgs/noun-wheelchair-1258532.svg" alt="Accessible icon" />
+          <br />
+          <span class="buttonText">Accessible</span>
+        </button>
+        <button id="bikeButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Biking')">
+          <img id="bikeImage" class="topImage" src="svgs/noun-bike-4959317.svg" alt="Bike icon" />
+          <br />
+          <span class="buttonText">Bike / Roll</span>
+        </button>
+        <button id="driveButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Driving')">
+          <img id="driveImage" class="topImage" src="svgs/noun-car-2558234.svg" alt="Drive icon" />
+          <br />
+          <span class="buttonText">Drive / Walk</span>
+        </button>
+      </div>
+</section>
+<section>
+    <h2>Map View</h2>
+	<div id='viewDiv'></div>
+</section>
+ </main>
+<script src='config.js'></script>
 <script src='script.js'></script>
 </body>
