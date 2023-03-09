@@ -173,10 +173,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
               position: 'bottom-left'
     });
 	
-		//Popup stuff
+	//Popup templating, to craete a custom popup
 	function popupTemplating(feature) {
 		const div = document.createElement("div");
-		
+		//Depending on how the data is stored, attributes might be lowercase or uppercase so we account for both with ?
 		let photourl = (feature.graphic.attributes.photourl === undefined ? feature.graphic.attributes.PHOTOURL : feature.graphic.attributes.photourl)
 		
 		let location = (feature.graphic.attributes.location === undefined ? feature.graphic.attributes.LOCATION : feature.graphic.attributes.location)
@@ -187,9 +187,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 		let contact = (feature.graphic.attributes.contact === undefined ? feature.graphic.attributes.CONTACT : feature.graphic.attributes.contact)
 		
-		
-
-				
+		//Now either leave the HTML blank if the attribute is null, or populate it with the appropriate data
 		if (photourl == null) {
 			photoHTML = ""
 		}else {
@@ -249,28 +247,33 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			}
 		}
+		//Append all the strings together and set to the popups div
 		div.innerHTML = photoHTML + locHTML + urlHTML + statusHTML + hoursHTML + contactHTML//'<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">' + 
 		return div;
 	}
-	//popupTemplate = new PopupTemplate()
+	//Now set the popup template to the one defined above
 	popupTemplate = {title:"{PLACENAME}",
 					  outFields: ["*"],
 					 content:popupTemplating
 					}
+	//Set the POIs and building polygons to use the custom popup template. 
 	poiPoly.popupTemplate = popupTemplate
 	poiFL.popupTemplate = popupTemplate
+	
+	
 	view.popup.on("trigger-action", (event) => {
-		  // Execute the measureThis() function if the measure-this action is clicked
+		  //Create an action that will start directing the user to the popups location
 		  if (event.action.id === "directions") {
 			  window.toggleDirections()
-			
+			  //If the user has clicked the destination box put the popup as the desination
 			  if (destFocus) {
 				  searchWidget2.searchTerm = view.popup.title	
 			  }
+			  //Otherwise set it as the origin
 			  if (originFocus) {
 				  searchWidget1.searchTerm = view.popup.title	
 			  }
-			
+			  //If the other search term is already filled in, and we haven't searched yet, fire the search. 
 			  cursterm1 = searchWidget1.searchTerm
 			  cursterm2 = searchWidget2.searchTerm 
 			  if (cursterm1.searchTerm != '' && cursterm1 != prevsterm1) {
@@ -295,19 +298,24 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		return tMode = supportedTravelModes.find((mode) => mode.name === fMode);
 	}
 	
-	
+	//Function that fires when thecustom navigation modes are being turned on and off
 	window.changeTravelModeAccess = function(){
+		//If simplify route is checked add this to the string 
 		if (document.getElementById("simplify").checked == true) {
 			simplifyStr = " Simplified"
 		}else {
 			simplifyStr = ""
 		}
+		//If no slope is checked add this to the string 
 		if (document.getElementById("noSlope").checked == true) {
 			steepStr = " No Slopes"
 		}else {
 			steepStr = ""
 		}
+		//Add these strings to the base mode to get the compelte travel mode
 		theMode = baseMode + steepStr + simplifyStr
+		
+		//Then route the results using this travel mode. 
 		getTravelMode(theMode).then(function()
 		{
 			if (stopArray1.length > 0 && stopArray2.length > 0) {
@@ -316,10 +324,12 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			
 		})
 	}
-	
+	//Function that fires when the base travel mode buttons are clicked 
 	window.changeTravelMode = function(bMode){
 		baseMode = bMode
 		theMode = baseMode + steepStr + simplifyStr
+		//For each mode, we need to style the buttons and then get the button modes, 
+		//And change the available entrances to either all or only accessible. 
 		if (baseMode == "Walking"){
 			document.getElementById("walkButton").style.backgroundColor = "#0680A6"
 			document.getElementById("accessButton").style.backgroundColor = ""
@@ -364,32 +374,28 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}
 	}
 	
-	
+	//By default the travel mode box is hidden
 	document.getElementById('travelmodeBox').style.display = 'none'
-	//document.getElementById('trackingBox').style.display = 'none'
-	
+	//Function that fires when the direction button is clicked
 	window.toggleDirections = function() {
 		
 		if (document.getElementById('travelmodeBox').style.display == 'none') {
-			
+			//Display the travel mode box
 			document.getElementById('travelmodeBox').style.display = 'flex'
 			document.getElementById('directionsButton').style.backgroundColor = "#0680A6"
-			//document.getElementById('trackingBox').style.display = 'flex'
+			//Show the second search widget (Destination)
 			searchWidget2.visible = true
+			//And the box that displays the written directons
 			directionsExpand.visible = true
-			//track.visible = true
-			//settingsExpand.visible = true
 			directionsMode = true
 			
 		}else {
-			
+			//Otherwise rehide all the elements that appear in the above step
 			document.getElementById('travelmodeBox').style.display = 'none'
 			document.getElementById('directionsButton').style.backgroundColor = ""
-			//document.getElementById('trackingBox').style.display = 'none'
 			searchWidget2.visible = false
 			directionsExpand.visible = false
-			//track.visible = false
-			//settingsExpand.visible = false
+			//And clear the second search widget / directions, remove the route from the map. 
 			searchWidget2.clear()
 			document.getElementById("directionsBox").innerHTML = ""
 			view.graphics.removeAll();
@@ -398,26 +404,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 	}
 	
-	//document.getElementById('accessBox').style.display = 'none'
-	window.toggleAccessBox = function() {
-		
-		if (document.getElementById('accessBox').style.display == 'none') {
-			document.getElementById('hiddenMenus').style.display = 'block'
-			document.getElementById('accessBox').style.display = 'block'
-			document.getElementById('settingsButton').style.backgroundColor = "#0680A6"
-		}else {
-			document.getElementById('accessBox').style.display = 'none'
-			document.getElementById('settingsButton').style.backgroundColor = ""
-		}
-	}
-
-	// Adds widget below other elements in the top left corner of the view
-
 	
-	timezone = "America/Vancouver"
-	
-
-
 	//The top search widget that acts as an origin in the routing 
 	var searchWidget1 = new Search({
 		view: view,
@@ -429,7 +416,6 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				popupTemplate:popupTemplate,
 				outFields: ["*"]
      		}),
-			//placeholder:"Search for a place",
 			placeholder:"Search for a place",
 			searchFields: ["placename","placename2","code"],
   			displayField:  "placename",
@@ -442,7 +428,6 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		popupEnabled: true,
 		container:"searchBoxes",
 		resultGraphicEnabled:true
-		//popupTemplate: popupTemplate
 	});
 	
     
@@ -482,13 +467,17 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		position: "top-left",
 		index: 10
 	});	
+	
+	//Remove the zoom buttons from the UI
 	view.ui.remove("zoom");
+	
+	//Create the HTML for the additional custom navigation settings, the check boxes.  
 	settingsDiv = document.createElement("div")
 	settingsDiv.id = "accessBox"
 	settingsDiv.style.visibility = 'block'
 	settingsDiv.innerHTML = '<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0"><div style="padding-left:5px"><b style="font-size:16px">Custom Navigation</b><br><input type="checkbox" id="noSlope" name="noSlope" value="NoSlope" onclick="window.parent.changeTravelModeAccess()"><label for="NoSlope">Avoid steep slopes</label><br><input type="checkbox" id="simplify" name="simplifyR" value="simplifyR" onclick="window.parent.changeTravelModeAccess()"><label for="accessE">Simplify route</label><br><b style="font-size:16px">Navigation Aids</b><br><input type="checkbox" id="highcont" name="highcont" value="HighContrast" onclick="window.parent.switchBasemaps()"><label for="HighContrast">High Contrast Visibility</label><br></div>'
 	
-	
+	//Put the above html into an expand widget so it can be expanded and collapsed on click
 	settingsExpand = new Expand({
 		view: view,
 		expandIconClass:"esri-icon-settings2",
@@ -499,17 +488,20 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		role:"Button"
 	});
 	
+	//Add the settings expand to the UI. 
 	view.ui.add(settingsExpand, {
 		position: "top-left",
 		index: 5,
 		
 	});	
 	
+	//Create the div that will contain the written directions 
 	directionsDiv = document.createElement("div")
 	directionsDiv.id = "directions"
 	directionsDiv.style.visibility = 'block'
 	directionsDiv.innerHTML = '<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0"><div id="directionsBox" style="padding-left:5px"></div>'
 	
+	//Put the above html into an expand widget so it can be expanded and collapsed on click
 	directionsExpand = new Expand({
 		view: view,
 		expandIconClass:"esri-icon-documentation",
@@ -519,36 +511,39 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		visible: false
 	});
 	
+	//Add the directions expand to the UI
 	view.ui.add(directionsExpand, {
 		position: "top-left",
 		index: 5,
 		
 	});	
-	
+	 //Add the track widget to the UI
 	 view.ui.add(track, {
 		 position: "top-left",
 		 useHeadingEnabled: false, // Don't change orientation of the map
 		 
 	 })
 	
-	
+	//The routing is only on the UBC campus, so we want to geofence it.
 	track.on("track", function(event) {
 		
+		//Check to see if the users location intersects with the polygon of the UEL
 		boundaryquery = new Query();
   		boundaryquery.geometry = track.graphic.geometry;  
   		boundaryquery.spatialRelationship = "intersects";
 		boundaryFL.queryFeatures(boundaryquery).then(function(results) {
 			if (results.features.length > 0) {
+				//If we're on campus enable the tracking
 				track.goToLocationEnabled = true
-				console.log('in tracking area')
 			}else {
+				//Otherwise display the message
 				track.goToLocationEnabled = false
 				alert('Tracking is only available on the UBC Vancouver Campus')
 				track.stop()
 			}
 		});
 	})
-
+	 //Ensures that only one expand widget can be shown at a time, otherwise they overlap. 
 	 expandHandle1 = watchUtils.pausable(directionsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
           expandHandle1.pause();
@@ -562,7 +557,6 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
           settingsExpand.collapse();
         }
       });
-	
       expandHandle2 = watchUtils.pausable(settingsExpand, "expanded", function(newValue, oldValue){
         if(newValue === true){
           expandHandle2.pause();
@@ -577,6 +571,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
         }
       });
 	
+	//We also want to collapse the expand widgets when autocomplete results are shown, oterwise they overlap.
 	searchWidget1.on('suggest-complete', function(event) {
 		directionsExpand.collapse();
 		settingsExpand.collapse();
@@ -588,32 +583,40 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 
 	//When the user finishes the search
 	searchWidget1.on('search-complete', function(result){
+		//If we're just searching we don't need directions 
 		if (directionsMode == false) {
 			view.graphics.removeAll();
 			directionsHTML = ""
 		}
+		//If we're in directions mode we want to zoom to the whole route rather than the search location, so we turn 
+		//on the goToOverride 
 		if (directionsMode && searchWidget2.goToOverride == true) {
 			searchWidget1.goToOverride = true
+		//But if we're in search mode we do want to zoom to the search point. 
 		}else {
 			searchWidget1.goToOverride = false
 		}
 		
+		//Reset the stop arrays
 		stopArray1 = []
 		stopArray1Removed = []
-		//Grab the ID of the searched term and create a query
 		
+		//If more than one search result is returned match it with the popup title 
 		if (result.results[0].results.length > 1) {
 			for (i=0; i < result.results[0].results.length; i++) {
+				
 				if (view.popup.title == result.results[0].results[i].feature.attributes.PLACENAME) {
 					origname = result.results[0].results[i].feature.attributes.PLACENAME
 					poid1 = result.results[0].results[i].feature.attributes.WAYF_UID
 				}
 			}
+			
+		//Otherwise set the origname and poid from the search result 
 		}else {
 			origname = result.results[0].results[0].feature.attributes.PLACENAME
 			poid1 = result.results[0].results[0].feature.attributes.WAYF_UID
 		}
-		
+		//Grab the ID of the searched term and create a query
 		const query = new Query();
 		query.where = "WAYF_UID = " + "'" + poid1 + "'" + entQuery;
 		query.returnGeometry = true;
@@ -651,19 +654,24 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	//When the user finishes the search
 	searchWidget2.on('search-complete', function(result){
 		
+		//We never want to go to the location of the destination search
 		searchWidget2.goToOverride = true
 		
+		//Reset the stop arrays
 		stopArray2 = []
 		stopArray2 = []
 		stopArray2Removed = []
 		
+		//Grab the destination name and point of interest id
 		destname = result.results[0].results[0].feature.attributes.PLACENAME
 		poid2 = result.results[0].results[0].feature.attributes.WAYF_UID
+		
+		//Create a query
 		const query = new Query();
 		query.where = "WAYF_UID = " + "'" + poid2 + "'"  + entQuery;
 		query.returnGeometry = true;
 		query.outFields = ["WAYF_UID"];
-										 
+		//This creates a promise that querys the data and populates the list 								 
 		crosswalkTable.queryFeatures(query).then(function(results){
 			if (results.features.length > 1) {
 				//Go through the results and push the stops into an array 
@@ -678,6 +686,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				stopArray2.push(stop)
 				return stopArray2
 			}
+		//Then, test the route of all these results 
 		}).then(function(stopResultArray){
 			if (directionsMode) {
 				routeResults(stopArray1,stopResultArray)
@@ -688,6 +697,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 
 	});
 	
+	//Keep track of whichs earch widget the user has clicked on 
 	searchWidget1.on("search-focus", function(event){
 		originFocus = true
 	 	destFocus = false
@@ -721,8 +731,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	}
 	//Function the tests the length of each route and returns the shortest one 
 	function getRoute(stop1,stop2,n) {
-
+			//We want to add the construction barriers to the route layer 
 			routeLayer.pointBarriers = pointBarriers
+			//Set the route parameters, using the correct travel mode, routing layer with barriers and the chosen
+			//origin and destination stops
 			const routeParams = new RouteParameters({
 				returnRoutes: true,
 				returnDirections: true,
@@ -732,35 +744,38 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				
 				layer: routeLayer,  
 				directionsLengthUnits: "meters",
-				// An authorization string used to access the routing service
+				
 				stops: new Collection([
 					new Stop({ name: origname, geometry: { x:stop1["geometry"]['x'], y: stop1["geometry"]['y'] }}),
 					new Stop({ name: destname, geometry: { x:stop2["geometry"]['x'], y: stop2["geometry"]['y'] }})
 				])
 			})
 			
-			//routeParams.polygonBarriers = routeLayer.polygonBarriers
+			//Initialize the lists
 			routeLengths = []
 			routeObjects = []
 			routeDirections = []
 		    routeParams.pointBarriers = routeLayer.pointBarriers
 			
+			//Solve the route, if successful it goes into this block of code
 			route.solve(routeUrl, routeParams).then(function(data) {
 				
 				var routeLength = 0
+				//Route between all combination of origin and destination entrances
 				data.routeResults.forEach(function(result) { 
-					
+					//Keep track of the length of each of these
 					routeLengths.push(result.route.attributes.Total_Length)
 					routeObjects.push(result.route)
 					routeDirections.push(result.directions.features)
 	
 				})
-
+				//If we've collected all the routes
 				if (routeLengths.length == n) {
-					
+					//Chose the shortest route based on length, also grab it's associated directions 
 					var chosenRoute = routeObjects[routeLengths.indexOf(Math.min.apply(Math, routeLengths))]
 					var chosenDirections = routeDirections[routeLengths.indexOf(Math.min.apply(Math, routeLengths))]
 					
+					//Symbolize the line that is drawn for the route
 					chosenRoute.symbol = {
 					  type: "simple-line",
 					  color: [5, 150, 255],
@@ -769,6 +784,8 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				
 					directionsHTML = ''
 					
+					//Go through the returned directions and place gthem into the directions box, along with some 
+					//custom changes to the HTML
 					for (i=0; i < chosenDirections.length; i++) {
 						
 						lengthnum = Math.round(chosenDirections[i].attributes.length)
@@ -783,14 +800,17 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 					
 					document.getElementById("directionsBox").innerHTML = directionsHTML
 					
+					//Remove the previous route and
 					view.graphics.removeAll();
+					//Draw the chosen route
 					view.graphics.add(chosenRoute);
+					//And zoom to it's extent
 					view.goTo(chosenRoute.geometry.extent)
 
 					
 				}
 			}) 
-		    
+		    //If the routing fails, display a message 
 			route.solve(routeUrl, routeParams).catch(function(data){
 				
 				alert('Cannot find route between these two location')
@@ -798,31 +818,38 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				
 			})
 	}
-	
+	//Function that changes the entrances between accessible only and all
     window.changeEntrances = function(entranceMode) {
+		
+		//If we can route to all entrances
 		if (entranceMode == "all") {
+			//We don't need a query to filer
 			entQuery = ""
+			//And we can add back any non accessible entrances that were removed
 			stopArray1 = stopArray1.concat(stopArray1Removed)
 			stopArray2 = stopArray2.concat(stopArray2Removed)
-			
+			//And then we can reroute
 			routeResults(stopArray1,stopArray2)
-			
+		//If we are only routing to accessible entrances
 		}else {
+			//We need a query to remove the non accessible entrances
 			entQueryForFilter = "(WAYF_UID = '" + poid1 + "' OR WAYF_UID = '" + poid2 + "')" + " AND "  + "ACCESSIBLE = '0'"
+			//And a query to select the accessible entrances or points that are not entrances (NULL) (such as a park) 
 			entQuery = " AND (ACCESSIBLE = '1' OR ACCESSIBLE IS NULL)"
+			//Set up a query with the entrances that we want to remove
 			const query = new Query();
 			query.where = entQueryForFilter;
 			query.returnGeometry = true;
 			query.outFields = ["WAYF_UID"];
 	
 			crosswalkTable.queryFeatures(query).then(function(results){
-
+				//If we have entrances that need to be removed
 				if (results.features.length > 1) {
 					
 				//Go through the results and push the stops into an array 
 				for (i = 0; i < results.features.length; i++) {
 				   
-					
+					//Organize them into stops that have been removed, sot hat they can be added back later, and also the new list of accessible only stops 
 				   const stop = { geometry: { x: results.features[i].geometry.longitude, y: results.features[i].geometry.latitude}}
 					stopArray2Removed = stopArray2.filter(function(item){ return item.geometry.x == stop.geometry.x && item.geometry.y == stop.geometry.y})
 					
@@ -835,7 +862,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 					
 				}
 				
-			//Otherwise just push the single one into the array
+			//Otherwise just push the single stop into the array
 			}else if (results.features.length == 1) {
 				const stop = { geometry: { x: results.features[0].geometry.longitude, y: results.features[0].geometry.latitude}}
 				
@@ -850,6 +877,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			}
 
 			return [stopArray1,stopArray2]
+			//Then route using the new filtered stopArrays
 			}).then(function(stopResultArray){
 				if (directionsMode) {
 					routeResults(stopResultArray[0],stopResultArray[1])
@@ -859,7 +887,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		}
 	}
 	
-	//webmap.portalItem.id = highContrastPortalID
+	//Function to switch between the high contrast basemap and the regular basemap
 	window.switchBasemaps = function() {
 		if (webmap.portalItem.id == basemapPortalID) {
 			var webmap2 = new WebMap({
@@ -867,9 +895,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				  id: highContrastPortalID
 				}
 			 });
+			//We need to re add the features to it as well
 			view.map = webmap2 
 			poiFL.url = poiForHighContrastUrl
-			//poiFL.popupTemplate = popupTemplate
 			view.map.add(poiFL)
 			view.map.add(poiPoly)
 			webmap = webmap2
@@ -879,6 +907,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				  id: basemapPortalID
 				}
 			 });
+			//We need to re add the features to it as well
 			view.map = webmap3 
 			poiFL.url = poiForBasemapUrl
 			view.map.add(poiFL)
@@ -886,7 +915,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 			webmap = webmap3
 		}
 	}
-	
+	//Function that displays a live status of whether or not a building is open or closed, uses external library
+	//moment-timezone-with-data.min.js"></
+	timezone = "America/Vancouver"
 	function isOpen(openTime, closeTime) {
 	 
 	  // handle special case
@@ -919,48 +950,65 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 		currentDate = new Date() 
 		
-		
+		//Set up an index for each day, and a dictionary to track the status of each day
 		daysDict = {"Sun":0,"M":1,"Tu":2,"W":3,"Th":4,"F":5,"Sat":6}
 		statusDict = {"Sun":"","M":"","Tu":"","W":"","Th":"","F":"","Sat":""}
 		days = []
 		statusList = []
+		//Iterate though the hours list
 		for (t=0; t < hoursList.length; t++) {
+			//If the building isn't closed all day
 			if (hoursList[t].split(": ")[1].includes("Closed") == false) {
+				//Parse out the opening and closing hour
 				openFromTo = hoursList[t].split(": ")[1].split("-")
+				//If we see the keyword Daily, the building has 
+				//the same opening and closing hours 7 days a week 
 				if (hoursList[t].split(": ")[0] == "Daily") {
+					//So we can go through all the days of the week with the same stsatus
 					status = isOpen(openFromTo[0],openFromTo[1])
 						Object.keys(statusDict).forEach(key => {
 					  statusDict[key] = status;
 					});
+				//Otherwise the building has different hours depending on the day
 				}else {
+					//If we see a comma, it is indicating several distinct days (eg. M,W,F) 
 					if (hoursList[t].split(": ")[0].includes(",")){
-						
+						//Split out these days 
 						dayRange = hoursList[t].split(": ")[0].split(",")
+						//And for each one grab it's associated hours 
 						for (var n=0; n < dayRange.length; n++) {
 							hoursList.push(dayRange[n].trim() + ": " + hoursList[t].split(": ")[1])
 						}
 					}
+					//Otherwise if see a dash, it is indicating a day range (eg. M-F)
 					else if (hoursList[t].split(": ")[0].includes("-")) {
 						dayRange = hoursList[t].split(": ")[0].split("-")
+						//Pull out the start day and end day
 						startDay = daysDict[dayRange[0].trim()]
 						endDay = daysDict[dayRange[1].trim()]
+						//If the range doesn't overlap to a new week (Eg. M-W)
 						if (startDay < endDay) {
+							//Count through the days and calculate the status for each 
 							for (var i = startDay; i <= endDay; i++) {
 								daydesc = Object.keys(daysDict).find(key => daysDict[key] === i)
 								
 								statusDict[daydesc] = isOpen(openFromTo[0],openFromTo[1])
 							}
+						//Otherwise if it is an odd day range such as (F-M)
 						}else {
+							//Start at the start date and go to the end of the week
 							for (var i = startDay; i <= 6; i++) {
 								daydesc = Object.keys(daysDict).find(key => daysDict[key] === i)
 								statusDict[daydesc] = isOpen(openFromTo[0],openFromTo[1])
 							}
+							//Then start on the next week and go tot he end day
 							for (var i = 0; i <= endDay; i++) {
 								daydesc = Object.keys(daysDict).find(key => daysDict[key] === i)
 								statusDict[daydesc] = isOpen(openFromTo[0],openFromTo[1])
 							}
 						}
 					}
+					//Otherwise it is simply a unique day, so just check for the key word. 
 					else if (hoursList[t].split(": ")[0].includes("Sun")) {
 						statusDict["Sun"] = isOpen(openFromTo[0],openFromTo[1])
 					}
@@ -985,9 +1033,12 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			}
 		}
+		//Account for daylight savings time using timezone 
 		now = moment.tz(timezone);
+		//Grab the appropriate day
 		today = now.day()
 		todaydesc = Object.keys(daysDict).find(key => daysDict[key] === today)
+		//And use this to access the correct status 
 		return statusDict[todaydesc]
 	}
 	
