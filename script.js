@@ -153,7 +153,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	  image: "svgs/noun-route-939679.svg"
 	};
 	
-	//Set the popup parameters 
+	//Popup stuff
 	view.popup = {
 	  dockEnabled: true,
 	  dockOptions: {
@@ -166,17 +166,16 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	  actions: [directionsAction],
 	  
 	};
-	//Position the popup in the bottom left of the screen 
+	
 	view.popup.set("dockOptions", {
               breakpoint: false,
               buttonEnabled: false,
               position: 'bottom-left'
     });
 	
-	//Popup templating, to craete a custom popup
 	function popupTemplating(feature) {
 		const div = document.createElement("div");
-		//Depending on how the data is stored, attributes might be lowercase or uppercase so we account for both with ?
+		
 		let photourl = (feature.graphic.attributes.photourl === undefined ? feature.graphic.attributes.PHOTOURL : feature.graphic.attributes.photourl)
 		
 		let location = (feature.graphic.attributes.location === undefined ? feature.graphic.attributes.LOCATION : feature.graphic.attributes.location)
@@ -187,7 +186,9 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 		
 		let contact = (feature.graphic.attributes.contact === undefined ? feature.graphic.attributes.CONTACT : feature.graphic.attributes.contact)
 		
-		//Now either leave the HTML blank if the attribute is null, or populate it with the appropriate data
+		
+
+				
 		if (photourl == null) {
 			photoHTML = ""
 		}else {
@@ -247,11 +248,10 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 				}
 			}
 		}
-		//Append all the strings together and set to the popups div
 		div.innerHTML = photoHTML + locHTML + urlHTML + statusHTML + hoursHTML + contactHTML//'<hr style="width:100%;height:25px;background-color:#002145;text-align:left;margin-left:0;margin-top:0">' + 
 		return div;
 	}
-	//Now set the popup template to the one defined above
+	//popupTemplate = new PopupTemplate()
 	popupTemplate = {title:"{PLACENAME}",
 					  outFields: ["*"],
 					 content:popupTemplating
@@ -260,6 +260,7 @@ require(["esri/Graphic","esri/config","esri/WebMap","esri/views/MapView","esri/w
 	poiPoly.popupTemplate = popupTemplate
 	poiFL.popupTemplate = popupTemplate
 	
+	console.log(poiPoly.popupTemplate.title)
 	
 	view.popup.on("trigger-action", (event) => {
 		  //Create an action that will start directing the user to the popups location
