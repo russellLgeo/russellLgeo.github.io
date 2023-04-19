@@ -1,0 +1,23 @@
+body.ubc-wfa .topnav{background-color:#002145;overflow:hidden}
+body.ubc-wfa .topnav a{color:#f2f2f2;text-align:center;padding:14px 16px;text-decoration:none;font-size:17px;font-family:Arial,sans-serif;float:right}
+body.ubc-wfa #viewDiv{padding:0;margin:0;height:94.5%;width:100%;z-index:-8}
+body.ubc-wfa #topButtons{position:fixed;top:60px;left:265px;display:none;z-index:2;height:70px;}
+body.ubc-wfa .topButton{padding-left:5px;padding-bottom:2.5px;padding-right:5px;padding-top:2.5px;background-color:#fff;border-radius:10px;width:76px}
+body.ubc-wfa .buttonText{font-size:12px;font-family:inherit;}
+body.ubc-wfa .topButton:hover{cursor:pointer;background-color:#40b4e5}
+body.ubc-wfa .topImage{padding-top:5px;width:30px;height:30px;border:none}
+body.ubc-wfa #travelModeBox{position:fixed;top:130px;left:265px;width:250px;z-index:1;display:none;flex-wrap:wrap;justify-content:left}
+body.ubc-wfa #directions{background-color:#fff;width:200px;height:400px;overflow-y:scroll}
+body.ubc-wfa #accessBox{background-color:#fff;width:200px;height:140px}
+body.ubc-wfa #logo{position:absolute;top:15px;left:20px;font-size:12px;color:#f2f2f2}
+body.ubc-wfa a{color:#00a8e0}
+body.ubc-wfa .w3-bar{background-color:#002145}
+body.ubc-wfa h3{position:absolute;clip:rect(1px 1px 1px 1px);padding:0;border:0;height:1px;width:1px;overflow:hidden}
+body.ubc-wfa .hours-open{color:green}
+body.ubc-wfa .hours-closed{color:red}
+body.ubc-wfa .active-button{background-color:#0680a6}
+
+@media(max-width: 600px){body.ubc-wfa #topButtons{right:10%}
+	body.ubc-wfa #travelModeBox{right:20%;width:70px}
+	body.ubc-wfa .topButton{width:70px}}
+

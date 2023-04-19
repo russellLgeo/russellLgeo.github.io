@@ -1,7 +1,7 @@
-//const basemapPortalID = "edec0b0428134a69b6954659ffb77777" //Default basemap portal id 
-//const highContrastPortalID = "c73f7396554943339a2208a1013cefc9" //High contrast basemap portal id 
-const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8" //Old default basemap portal id 
-const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736" //Old High contrast basemap portal id 
+const basemapPortalID = "edec0b0428134a69b6954659ffb77777" //Default basemap portal id 
+const highContrastPortalID = "c73f7396554943339a2208a1013cefc9" //High contrast basemap portal id 
+//const basemapPortalID = "c60119036d11407596d92bb1b9dc23c8" //Old default basemap portal id 
+//const highContrastPortalID = "c55e159550dd4499b43b234ab1f32736" //Old High contrast basemap portal id 
 const routeUrl = 'https://ags.gis.ubc.ca/arcgis/rest/services/Multimodal/NAServer/Route' //Routing service URL
 const routePortalID = "b1846c8638bb4d679bd06f120c87825b"  //Routing service portal ID
 const steepSlopeSegmentPortalID = "159428d89f3b412cae133a5e8c2a11ba" //Feature layer of routing segments that have been identified as steep

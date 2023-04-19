@@ -1,76 +1,67 @@
+<html lang="en-CA">
 <head>
-   
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=yes" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=yes">
 	<title>UBC Wayfinding Application</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.39/moment-timezone-with-data.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" id="lodashScript"></script>
+    <script src="./assets/js/lodash-no-conflict.min.js"></script>
 	<script src="https://js.arcgis.com/4.23/"></script>
-    <script>
-      require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
-
-      });
-    </script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'></script>
-
-	<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
-
-    <link rel="stylesheet" type="text/css" href="style.css" />
-   
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
-<body>
+<body class="ubc-wfa">
 <header>
-	<div id='logo'><img src="ubc-logo.png" alt="UBC Logo"></div>
+	<div id="logo"><img src="ubc-logo.png" alt="UBC Logo"></div>
 	<div class="topnav">
 	  <a href="#contact">Contact</a>
 	  <a href="#about">About</a>
 	</div>
 </header>
 <main>
-<section>
+<div>
 	<h3>Search Box</h3>
-	<div id='searchBoxes'></div>
-</section>
- <section>
+	<div id="searchBoxes"></div>
+</div>
+ <div>
 	<h3>Directions Button</h3>
 	<div id="topButtons">
-	<button title="Directions" id='directionsButton' class = 'topButton' type="button" onclick = "window.parent.toggleDirections()">
-		<img id ='directionsImage' class='topImage' src="svgs/noun-route-939679.svg" alt="buttonpng" border="0" />
-		<br/>
-		<b style='font-size:12px; white-space:pre'>Directions</b>
+	<button title="Directions" id="directionsButton" class="topButton" type="button">
+		<img id="directionsImage" class="topImage" src="./assets/svgs/noun-route-939679.svg" alt="buttonpng">
+		<br>
+		<b style="font-size:12px; white-space:pre;">Directions</b>
 	</button>
 	</div>
-</section>
-<section>
-    <div id="travelmodeBox">
-        <button id="walkButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Walking')">
-          <img id="walkImage" class="topImage" src="svgs/noun-walk-341356.svg" alt="Walk icon" />
-          <br />
+</div>
+<div>
+    <div id="travelModeBox">
+        <button id="walkButton" class="topButton" type="button">
+          <img id="walkImage" class="topImage" src="./assets/svgs/noun-walk-341356.svg" alt="Walk icon">
+          <br>
           <span class="buttonText">Walk</span>
         </button>
-        <button id="accessButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Accessible')">
-          <img id="accessImage" class="topImage" src="svgs/noun-wheelchair-1258532.svg" alt="Accessible icon" />
-          <br />
+        <button id="accessButton" class="topButton" type="button">
+          <img id="accessImage" class="topImage" src="./assets/svgs/noun-wheelchair-1258532.svg" alt="Accessible icon">
+          <br>
           <span class="buttonText">Accessible</span>
         </button>
-        <button id="bikeButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Biking')">
-          <img id="bikeImage" class="topImage" src="svgs/noun-bike-4959317.svg" alt="Bike icon" />
-          <br />
+        <button id="bikeButton" class="topButton" type="button">
+          <img id="bikeImage" class="topImage" src="./assets/svgs/noun-bike-4959317.svg" alt="Bike icon">
+          <br>
           <span class="buttonText">Bike / Roll</span>
         </button>
-        <button id="driveButton" class="topButton" type="button" onclick="window.parent.changeTravelMode('Driving')">
-          <img id="driveImage" class="topImage" src="svgs/noun-car-2558234.svg" alt="Drive icon" />
-          <br />
-          <span class="buttonText">Drive / Walk</span>
-        </button>
       </div>
-</section>
-<section>
+</div>
+<div>
     <h3>Map View</h3>
-	<div id='viewDiv'></div>
-</section>
- </main>
-<script src='config.js'></script>
-<script src='script.js'></script>
+	<div id="viewDiv"></div>
+</div>
+</main>
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/script.js"></script>
 </body>
+</html>
