@@ -74,7 +74,7 @@ global console,
             'esri/core/Collection',
             'esri/widgets/Track',
             'esri/widgets/Expand',
-			'esri/widgets/Zoom'
+			'esri/symbols/SimpleMarkerSymbol'
         ];
 
         /**
@@ -165,7 +165,7 @@ global console,
          * @param Graphic
          * @param PolygonBarrier
          * @param FeatureSet
-		 * @param Zoom
+		 * @param SimpleMarkerSymbol
          */
         function requireCallback(
             esriConfig,
@@ -187,7 +187,7 @@ global console,
             Graphic,
             PolygonBarrier,
             FeatureSet,
-			Zoom
+			SimpleMarkerSymbol
         ) {
             // Set the API key and portal URL on the Esri config object
             _.set(esriConfig, 'apiKey', apiKey);
@@ -279,7 +279,7 @@ global console,
                 /** @type {string} */
                 LOCATION_IS = 'Location is',
                 /** @type {string} */
-                CONTACTS = 'Contacts',
+                CONTACTS = 'Contact',
 
                 // Stop filter types
                 /** @type {string} */
@@ -839,6 +839,7 @@ global console,
             function popupTemplating(feature) {
                 const photoUrl = !_.isUndefined(_.get(feature, 'graphic.attributes.photourl')) ? _.get(feature, 'graphic.attributes.photourl') : _.get(feature, 'graphic.attributes.PHOTOURL'),
                     location = !_.isUndefined(_.get(feature, 'graphic.attributes.location')) ? _.get(feature, 'graphic.attributes.location') : _.get(feature, 'graphic.attributes.LOCATION'),
+//					address = !_.isUndefined(_.get(feature, 'graphic.attributes.full_address')) ? _.get(feature, 'graphic.attributes.full_address') : _.get(feature, 'graphic.attributes.FULL_ADDRESS'),
                     url = !_.isUndefined(_.get(feature, 'graphic.attributes.url')) ? _.get(feature, 'graphic.attributes.url') : _.get(feature, 'graphic.attributes.URL'),
                     hours = !_.isUndefined(_.get(feature, 'graphic.attributes.hours')) ? _.get(feature, 'graphic.attributes.hours') : _.get(feature, 'graphic.attributes.HOURS'),
                     contact = !_.isUndefined(_.get(feature, 'graphic.attributes.contact')) ? _.get(feature, 'graphic.attributes.contact') : _.get(feature, 'graphic.attributes.CONTACT');
@@ -888,6 +889,15 @@ global console,
                         logError(e);
                     }
                 }
+// 				// If we have a location string
+//                if (!_.isEmpty(address)) {
+//                    try {
+//                        div = appendChildElements(div, `${FULL_ADDESS}: ${full_address}`);
+//                        div = appendTrailingBrElement(div, 2);
+//                    } catch (e) {
+//                        logError(e);
+//                    }
+//                }
 
                 // if the location has a link associated with it, add a link to the location's website
                 if (!_.isEmpty(url)) {
@@ -1488,13 +1498,25 @@ global console,
                                 name: SEARCH_WIDGET_NAME,
                                 outFields: ['*'],
                                 placeholder: SEARCH_WIDGET_PLACEHOLDER,
-                                searchFields: ['placename', 'placename2', 'code']
+                                searchFields: ['placename', 'placename2', 'code'],
+								resultSymbol: {
+								   type: "simple-marker",  // autocasts as new PictureMarkerSymbol()
+								  //url: this.basePath + "/images/search/search-symbol-32.png",
+								   size: 15,
+								   color:"#B21511",
+								   outline: {  // autocasts as new SimpleLineSymbol()
+									   
+									color: [ 234, 67, 45, 1 ],
+									width: "5px"
+								  }
+							   }
                             }
                         ],
+												
                         view: view
                     }
                 ),
-				
+				 
                 /** @type {FeatureLayer} Feature layer for search widget 2 */
                 sw2FeatureLayer = new FeatureLayer(
                     {
@@ -1571,6 +1593,7 @@ global console,
                 routeDirections = [];
 
 				
+
 			/**
              * Start of permalink code
              */
@@ -2465,6 +2488,7 @@ global console,
 
                     // Keep track of which search widget the user has clicked on
                     searchWidget1.on('search-focus', toggleFocus);
+					
                 }
 
                 if (_.isFunction(_.get(searchWidget2, 'on'))) {
