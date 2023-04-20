@@ -1482,7 +1482,7 @@ global console,
                     {
                         container: 'searchBox1',
                         includeDefaultSources: false,
-                        locationEnabled: false,
+                        locationEnabled: true,
                         maxResults: 6,
                         maxSuggestions: 6,
                         popupEnabled: true,
